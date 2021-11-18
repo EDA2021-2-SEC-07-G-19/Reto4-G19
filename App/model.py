@@ -29,22 +29,42 @@ import config as cf
 from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
 from DISClib.DataStructures import mapentry as me
-from DISClib.Algorithms.Sorting import shellsort as sa
+from DISClib.Algorithms.Sorting import mergesort as ms
+from DISClib.Algorithms.Graphs import scc
+from DISClib.Algorithms.Graphs import dijsktra as djk
+from DISClib.ADT.graph import gr
 assert cf
 
 """
 Se define la estructura de un catálogo de videos. El catálogo tendrá dos listas, una para los videos, otra para las categorias de
 los mismos.
 """
-
+#========================
 # Construccion de modelos
+#========================
+def newAnalyzer():
+    analyzer = {'airports': None,
+                'connections': None,
+                }
 
+    return analyzer
+
+#===============================================
 # Funciones para agregar informacion al catalogo
+#===============================================
 
+#=================================
 # Funciones para creacion de datos
+#=================================
 
+#======================
 # Funciones de consulta
+#======================
 
+#=================================================================
 # Funciones utilizadas para comparar elementos dentro de una lista
+#=================================================================
 
+#==========================
 # Funciones de ordenamiento
+#==========================
