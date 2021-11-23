@@ -46,7 +46,7 @@ def loadDataRoutes(analyzer, routesfile):
     for route in input_file:
         model.addRoute(analyzer, route)
         model.addConnection(analyzer, route)
-    
+    model.generatGraph(analyzer)
     return analyzer
 
 def loadDataAirports(analyzer, airportsfile):
@@ -55,6 +55,7 @@ def loadDataAirports(analyzer, airportsfile):
                                 delimeter=",")
 
     return analyzer
+
 
 #==========================
 # Funciones de ordenamiento

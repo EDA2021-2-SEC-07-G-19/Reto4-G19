@@ -45,10 +45,16 @@ los mismos.
 def newAnalyzer():
     analyzer = {'routes': None,
                 'airports': None,
+                'noDirigido': None
                 }
 
     analyzer['routes'] = gr.newGraph(datastructure = 'ADJ_LIST', 
                                      directed = True,
+                                     size = 4000,
+                                     comparefunction = cmpRouteIds)
+
+    analyzer['noDirigido']=gr.newGraph(datastructure = 'ADJ_LIST', 
+                                     directed = False,
                                      size = 4000,
                                      comparefunction = cmpRouteIds)
 
@@ -75,6 +81,27 @@ def addConnection(analyzer, route):
     if edge is None:
         gr.addEdge(analyzer['routes'], route['Departure'], route['Destination'], route['distance_km'])
     
+    return analyzer
+def generatGraph(analyzer):
+    vertices = gr.vertices(analyzer['routes'])
+    i = 0
+    while i < lt.size(vertices):
+        j = i + 1
+        while j <= lt.size(vertices):
+            aero1 = lt.getElement(vertices, i)
+            aero2 = lt.getElement(vertices, j)
+            arco1 = gr.getEdge(analyzer['routes'], aero1, aero2)
+            arco2 = gr.getEdge(analyzer['routes'], aero2, aero1)
+            bidireccion = arco1 is not None and arco2 is not None
+            if bidireccion:
+                if not gr.containsVertex(analyzer['noDirigido'], aero1):
+                    gr.insertVertex(analyzer['noDirigido'], aero1)
+
+                if not gr.containsVertex(analyzer['noDirigido'], aero2):
+                    gr.insertVertex(analyzer['noDirigido'], aero2)
+                gr.addEdge(analyzer['noDirigido'], aero1, aero2,0)
+            j+=1
+        i+=1
     return analyzer
 
 #=================================
