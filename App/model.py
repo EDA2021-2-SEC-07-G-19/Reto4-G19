@@ -43,15 +43,39 @@ los mismos.
 # Construccion de modelos
 #========================
 def newAnalyzer():
-    analyzer = {'airports': None,
-                'connections': None,
+    analyzer = {'routes': None,
+                'airports': None,
                 }
+
+    analyzer['routes'] = gr.newGraph(datastructure = 'ADJ_LIST', 
+                                     directed = True,
+                                     size = 4000,
+                                     comparefunction = cmpRouteIds)
+
+    analyzer['airports'] = mp.newMap(maptype = 'PROBING',
+                                     loadfactor = 0.5,
+                                     comparefunction = cmpMapAirport)
 
     return analyzer
 
 #===============================================
 # Funciones para agregar informacion al catalogo
 #===============================================
+def addRoute(analyzer, route):
+    if not gr.containsVertex(analyzer['routes'], route['Departure']):
+        gr.insertVertex(analyzer['routes'], route['Departure'])
+
+    if not gr.containsVertex(analyzer['routes'], route['Destination']):
+        gr.insertVertex(analyzer['routes'], route['Destination'])
+    
+    return analyzer
+
+def addConnection(analyzer, route):
+    edge = gr.getEdge(analyzer['routes'], route['Departure'], route['Destination'])
+    if edge is None:
+        gr.addEdge(analyzer['routes'], route['Departure'], route['Destination'], route['distance_km'])
+    
+    return analyzer
 
 #=================================
 # Funciones para creacion de datos
@@ -60,10 +84,34 @@ def newAnalyzer():
 #======================
 # Funciones de consulta
 #======================
+def totalAirports(analyzer):
+
+    return gr.numVertices(analyzer['routes'])
+
+def totalConnections(analyzer):
+
+    return gr.numEdges(analyzer['routes'])
 
 #=================================================================
 # Funciones utilizadas para comparar elementos dentro de una lista
 #=================================================================
+def cmpRouteIds(route, keyvalueroute):
+    routecode = keyvalueroute['key']
+    if (route == routecode):
+        return 0
+    elif (route > routecode):
+        return 1
+    else:
+        return -1
+
+def cmpMapAirport(keyname, airport):
+    airport_entry = me.getKey(airport)
+    if (keyname == airport_entry):
+        return 0
+    elif (keyname > airport_entry):
+        return 1
+    else:
+        return -1
 
 #==========================
 # Funciones de ordenamiento

@@ -26,6 +26,7 @@ import controller
 from DISClib.ADT import list as lt
 assert cf
 
+sys.setrecursionlimit(2 ** 20)
 
 """
 La vista se encarga de la interacción con el usuario
@@ -46,10 +47,12 @@ def printMenu():
     print('6- Requerimiento 4')
     print('7- Requerimiento 5')
     print('8- Requerimiento 6')
+    print('9- Requerimiento 7')
     print('0- Salir')
     print("*******************************************")
 
-catalog = None
+routesfile = 'routes_full.csv'
+cont = None
 
 """
 Menu principal
@@ -63,6 +66,14 @@ while True:
 
     elif int(inputs[0]) == 2:
         print("\nCargando información de aeropuertos y rutas ....")
+        controller.loadDataRoutes(cont, routesfile)
+
+        numvertex = controller.totalAirports(cont)
+        numedges = controller.totalConnections(cont)
+
+        print('Número de vertices: ' + str(numvertex))
+        print('Número de arcos: ' + str(numedges))
+        print('El limite de recursion actual es: ' + str(sys.getrecursionlimit()))
 
     elif int(inputs[0]) == 3:
         pass
@@ -77,6 +88,9 @@ while True:
         pass
 
     elif int(inputs[0]) == 8:
+        pass
+
+    elif int(inputs[0]) == 9:
         pass
 
     else:

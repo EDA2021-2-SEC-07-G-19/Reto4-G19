@@ -31,7 +31,6 @@ El controlador se encarga de mediar entre la vista y el modelo.
 #======================================
 # Inicialización del Catálogo de libros
 #======================================
-
 def Init():
     analyzer = model.newAnalyzer()
     return analyzer
@@ -39,6 +38,23 @@ def Init():
 #=================================
 # Funciones para la carga de datos
 #=================================
+def loadDataRoutes(analyzer, routesfile):
+    routesfile = cf.data_dir + routesfile
+    input_file = csv.DictReader(open(routesfile, encoding="utf-8"),
+                                delimiter=",")
+    
+    for route in input_file:
+        model.addRoute(analyzer, route)
+        model.addConnection(analyzer, route)
+    
+    return analyzer
+
+def loadDataAirports(analyzer, airportsfile):
+    airportsfile = cf.data_dir + airportsfile
+    input_file = csv.DictReader(open(airportsfile, encoding="utf-8"),
+                                delimeter=",")
+
+    return analyzer
 
 #==========================
 # Funciones de ordenamiento
@@ -47,3 +63,10 @@ def Init():
 #========================================
 # Funciones de consulta sobre el catálogo
 #========================================
+def totalAirports(analyzer):
+
+    return model.totalAirports(analyzer)
+
+def totalConnections(analyzer):
+
+    return model.totalConnections(analyzer)
