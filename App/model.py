@@ -83,12 +83,32 @@ def addConnection(analyzer, route):
     
     return analyzer
 
+def addRouteConnectionND(analyzer, route):
+    aero1 = route['Departure']
+    aero2 = route['Destination']
+
+    arco1 = gr.getEdge(analyzer['routes'], aero1, aero2)
+    arco2 = gr.getEdge(analyzer['routes'], aero2, aero1)
+
+    if (arco1 != None) and (arco2 != None):
+        if not gr.containsVertex(analyzer['noDirigido'], aero1):
+            gr.insertVertex(analyzer['noDirigido'], aero1)
+
+        if not gr.containsVertex(analyzer['noDirigido'], aero2):
+            gr.insertVertex(analyzer['noDirigido'], aero2)
+        
+        gr.addEdge(analyzer['noDirigido'], aero1, aero2, 0)
+        gr.addEdge(analyzer['noDirigido'], aero2, aero1, 0)
+
+    return analyzer
+
 def generateGraph(analyzer):
     vertices = gr.vertices(analyzer['routes'])
     i = 0
-    j = 1
+
     while i < lt.size(vertices):
         aero1 = lt.getElement(vertices, i)
+        j = 1
 
         while j <= lt.size(vertices):
             aero2 = lt.getElement(vertices, j)

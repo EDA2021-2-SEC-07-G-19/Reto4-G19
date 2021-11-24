@@ -46,8 +46,9 @@ def loadDataRoutes(analyzer, routesfile):
     for route in input_file:
         model.addRoute(analyzer, route)
         model.addConnection(analyzer, route)
+        model.addRouteConnectionND(analyzer, route)
 
-    model.generateGraph(analyzer)
+    #model.generateGraph(analyzer)
 
     return analyzer
 
