@@ -98,7 +98,6 @@ def addRouteConnectionND(analyzer, route):
             gr.insertVertex(analyzer['noDirigido'], aero2)
         
         gr.addEdge(analyzer['noDirigido'], aero1, aero2, 0)
-        gr.addEdge(analyzer['noDirigido'], aero2, aero1, 0)
 
     return analyzer
 
@@ -108,7 +107,7 @@ def generateGraph(analyzer):
 
     while i < lt.size(vertices):
         aero1 = lt.getElement(vertices, i)
-        j = 1
+        j = i + 1
 
         while j <= lt.size(vertices):
             aero2 = lt.getElement(vertices, j)
@@ -124,7 +123,6 @@ def generateGraph(analyzer):
                     gr.insertVertex(analyzer['noDirigido'], aero2)
 
                 gr.addEdge(analyzer['noDirigido'], aero1, aero2, 0)
-                gr.addEdge(analyzer['noDirigido'], aero2, aero1, 0)
 
             j += 1
         i += 1
