@@ -71,8 +71,15 @@ while True:
         numvertex = controller.totalAirports(cont)
         numedges = controller.totalConnections(cont)
 
-        print('Número de vertices: ' + str(numvertex))
-        print('Número de arcos: ' + str(numedges))
+        numvertex2 = controller.totalAirports2(cont)
+        numedges2 = controller.totalConnections2(cont)
+
+        print('Número de vertices en el dígrafo: ' + str(numvertex))
+        print('Número de arcos en el dígrafo: ' + str(numedges))
+
+        print('Número de vertices en el grafo no dirigido: ' + str(numvertex2))
+        print('Número de arcos en el grafo no dirigido: ' + str(numedges2))
+
         print('El limite de recursion actual es: ' + str(sys.getrecursionlimit()))
 
     elif int(inputs[0]) == 3:

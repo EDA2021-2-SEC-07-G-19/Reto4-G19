@@ -53,10 +53,10 @@ def newAnalyzer():
                                      size = 4000,
                                      comparefunction = cmpRouteIds)
 
-    analyzer['noDirigido']=gr.newGraph(datastructure = 'ADJ_LIST', 
-                                     directed = False,
-                                     size = 4000,
-                                     comparefunction = cmpRouteIds)
+    analyzer['noDirigido'] = gr.newGraph(datastructure = 'ADJ_LIST', 
+                                         directed = False,
+                                         size = 4000,
+                                         comparefunction = cmpRouteIds)
 
     analyzer['airports'] = mp.newMap(maptype = 'PROBING',
                                      loadfactor = 0.5,
@@ -82,26 +82,33 @@ def addConnection(analyzer, route):
         gr.addEdge(analyzer['routes'], route['Departure'], route['Destination'], route['distance_km'])
     
     return analyzer
-def generatGraph(analyzer):
+
+def generateGraph(analyzer):
     vertices = gr.vertices(analyzer['routes'])
     i = 0
+    j = 1
     while i < lt.size(vertices):
-        j = i + 1
+        aero1 = lt.getElement(vertices, i)
+
         while j <= lt.size(vertices):
-            aero1 = lt.getElement(vertices, i)
             aero2 = lt.getElement(vertices, j)
+            
             arco1 = gr.getEdge(analyzer['routes'], aero1, aero2)
             arco2 = gr.getEdge(analyzer['routes'], aero2, aero1)
-            bidireccion = arco1 is not None and arco2 is not None
-            if bidireccion:
+
+            if arco1 != None and arco2 != None:
                 if not gr.containsVertex(analyzer['noDirigido'], aero1):
                     gr.insertVertex(analyzer['noDirigido'], aero1)
 
                 if not gr.containsVertex(analyzer['noDirigido'], aero2):
                     gr.insertVertex(analyzer['noDirigido'], aero2)
-                gr.addEdge(analyzer['noDirigido'], aero1, aero2,0)
-            j+=1
-        i+=1
+
+                gr.addEdge(analyzer['noDirigido'], aero1, aero2, 0)
+                gr.addEdge(analyzer['noDirigido'], aero2, aero1, 0)
+
+            j += 1
+        i += 1
+    
     return analyzer
 
 #=================================
@@ -118,6 +125,14 @@ def totalAirports(analyzer):
 def totalConnections(analyzer):
 
     return gr.numEdges(analyzer['routes'])
+
+def totalAirports2(analyzer):
+
+    return gr.numVertices(analyzer['noDirigido'])
+
+def totalConnections2(analyzer):
+
+    return gr.numEdges(analyzer['noDirigido'])
 
 #=================================================================
 # Funciones utilizadas para comparar elementos dentro de una lista

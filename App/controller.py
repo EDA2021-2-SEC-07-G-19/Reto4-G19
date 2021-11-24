@@ -46,7 +46,9 @@ def loadDataRoutes(analyzer, routesfile):
     for route in input_file:
         model.addRoute(analyzer, route)
         model.addConnection(analyzer, route)
-    model.generatGraph(analyzer)
+
+    model.generateGraph(analyzer)
+
     return analyzer
 
 def loadDataAirports(analyzer, airportsfile):
@@ -71,3 +73,11 @@ def totalAirports(analyzer):
 def totalConnections(analyzer):
 
     return model.totalConnections(analyzer)
+
+def totalAirports2(analyzer):
+
+    return model.totalAirports2(analyzer)
+
+def totalConnections2(analyzer):
+
+    return model.totalConnections2(analyzer)
