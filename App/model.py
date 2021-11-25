@@ -44,8 +44,9 @@ los mismos.
 #========================
 def newAnalyzer():
     analyzer = {'routes': None,
-                'airports': None,
-                'noDirigido': None
+                'noDirigido': None,
+                'lt_airports': None,
+                'lt_ciudades': None,
                 }
 
     analyzer['routes'] = gr.newGraph(datastructure = 'ADJ_LIST', 
@@ -58,9 +59,9 @@ def newAnalyzer():
                                          size = 4000,
                                          comparefunction = cmpRouteIds)
 
-    analyzer['airports'] = mp.newMap(maptype = 'PROBING',
-                                     loadfactor = 0.5,
-                                     comparefunction = cmpMapAirport)
+    analyzer['lt_airports'] = lt.newList(datastructure = 'ARRAY_LIST', cmpfunction = cmpListIATA)
+    
+    analyzer['lt_ciudades'] = lt.newList(datastructure = 'ARRAY_LIST', cmpfunction = cmpListCity)
 
     return analyzer
 
@@ -101,33 +102,11 @@ def addRouteConnectionND(analyzer, route):
 
     return analyzer
 
-def generateGraph(analyzer):
-    vertices = gr.vertices(analyzer['routes'])
-    i = 0
+def addAirport(analyzer, airport):
+    lt.addLast(analyzer['lt_airports'], airport)
 
-    while i < lt.size(vertices):
-        aero1 = lt.getElement(vertices, i)
-        j = i + 1
-
-        while j <= lt.size(vertices):
-            aero2 = lt.getElement(vertices, j)
-            
-            arco1 = gr.getEdge(analyzer['routes'], aero1, aero2)
-            arco2 = gr.getEdge(analyzer['routes'], aero2, aero1)
-
-            if arco1 != None and arco2 != None:
-                if not gr.containsVertex(analyzer['noDirigido'], aero1):
-                    gr.insertVertex(analyzer['noDirigido'], aero1)
-
-                if not gr.containsVertex(analyzer['noDirigido'], aero2):
-                    gr.insertVertex(analyzer['noDirigido'], aero2)
-
-                gr.addEdge(analyzer['noDirigido'], aero1, aero2, 0)
-
-            j += 1
-        i += 1
-    
-    return analyzer
+def addCity(analyzer, city):
+    lt.addLast(analyzer['lt_ciudades'], city)
 
 #=================================
 # Funciones para creacion de datos
@@ -152,6 +131,20 @@ def totalConnections2(analyzer):
 
     return gr.numEdges(analyzer['noDirigido'])
 
+def TotalAirports(analyzer):
+    lt_airports = analyzer['lt_airports']
+    total_airports = lt.size(lt_airports)
+    primer_airport = lt.getElement(lt_airports, 1)
+
+    return total_airports, primer_airport
+
+def TotalCiudades(analyzer):
+    lt_ciudades = analyzer['lt_ciudades']
+    total_ciudades = lt.size(lt_ciudades)
+    ultima_ciudad = lt.getElement(lt_ciudades, total_ciudades)
+
+    return total_ciudades, ultima_ciudad
+
 #=================================================================
 # Funciones utilizadas para comparar elementos dentro de una lista
 #=================================================================
@@ -164,11 +157,18 @@ def cmpRouteIds(route, keyvalueroute):
     else:
         return -1
 
-def cmpMapAirport(keyname, airport):
-    airport_entry = me.getKey(airport)
-    if (keyname == airport_entry):
+def cmpListIATA(iata1, iata2):
+    if (iata1 == iata2):
         return 0
-    elif (keyname > airport_entry):
+    elif (iata1 > iata2):
+        return 1
+    else:
+        return -1
+
+def cmpListCity(city1, city2):
+    if (city1 == city2):
+        return 0
+    elif (city1 > city2):
         return 1
     else:
         return -1

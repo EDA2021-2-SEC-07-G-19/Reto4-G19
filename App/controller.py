@@ -38,6 +38,11 @@ def Init():
 #=================================
 # Funciones para la carga de datos
 #=================================
+def loadData(analyzer, routesfile, airportsfile, cityfile):
+    loadDataRoutes(analyzer, routesfile)
+    loadDataCiudades(analyzer, cityfile)
+    loadDataAirports(analyzer, airportsfile)
+
 def loadDataRoutes(analyzer, routesfile):
     routesfile = cf.data_dir + routesfile
     input_file = csv.DictReader(open(routesfile, encoding="utf-8"),
@@ -48,17 +53,25 @@ def loadDataRoutes(analyzer, routesfile):
         model.addConnection(analyzer, route)
         model.addRouteConnectionND(analyzer, route)
 
-    #model.generateGraph(analyzer)
+    return analyzer
+
+def loadDataCiudades(analyzer, cityfile):
+    cityfile = cf.data_dir + cityfile
+    input_file = csv.DictReader(open(cityfile, encoding="utf-8"))
+
+    for city in input_file:
+        model.addCity(analyzer, city)
 
     return analyzer
 
 def loadDataAirports(analyzer, airportsfile):
     airportsfile = cf.data_dir + airportsfile
-    input_file = csv.DictReader(open(airportsfile, encoding="utf-8"),
-                                delimeter=",")
+    input_file = csv.DictReader(open(airportsfile, encoding="utf-8"))
+
+    for airport in input_file:
+        model.addAirport(analyzer, airport)
 
     return analyzer
-
 
 #==========================
 # Funciones de ordenamiento
@@ -82,3 +95,11 @@ def totalAirports2(analyzer):
 def totalConnections2(analyzer):
 
     return model.totalConnections2(analyzer)
+
+def TotalAirports(map_airports):
+
+    return model.TotalAirports(map_airports)
+
+def TotalCiudades(analyzer):
+
+    return model.TotalCiudades(analyzer)

@@ -24,6 +24,8 @@ import config as cf
 import sys
 import controller
 from DISClib.ADT import list as lt
+import prettytable as pt
+from prettytable import PrettyTable, ALL
 assert cf
 
 sys.setrecursionlimit(2 ** 20)
@@ -52,6 +54,8 @@ def printMenu():
     print("*******************************************")
 
 routesfile = 'routes_full.csv'
+airportsfile = 'airports_full.csv'
+cityfile = 'worldcities.csv'
 cont = None
 
 """
@@ -66,7 +70,7 @@ while True:
 
     elif int(inputs[0]) == 2:
         print("\nCargando información de aeropuertos y rutas ....")
-        controller.loadDataRoutes(cont, routesfile)
+        controller.loadData(cont, routesfile, airportsfile, cityfile)
 
         numvertex = controller.totalAirports(cont)
         numedges = controller.totalConnections(cont)
@@ -74,11 +78,25 @@ while True:
         numvertex2 = controller.totalAirports2(cont)
         numedges2 = controller.totalConnections2(cont)
 
-        print('Número de vertices en el dígrafo: ' + str(numvertex))
-        print('Número de arcos en el dígrafo: ' + str(numedges))
+        airports = controller.TotalAirports(cont)
 
-        print('Número de vertices en el grafo no dirigido: ' + str(numvertex2))
-        print('Número de arcos en el grafo no dirigido: ' + str(numedges2))
+        ciudades = controller.TotalCiudades(cont)
+
+        print('Número de aeropuertos en el dígrafo: ' + str(numvertex))
+        print('Número de rutas aereas en el dígrafo: ' + str(numedges))
+        print('\n')
+
+        print('Número de aeropuertos en el grafo no dirigido: ' + str(numvertex2))
+        print('Número de rutas aereas en el grafo no dirigido: ' + str(numedges2))
+        print('\n')
+
+        print('El total de ciudades cargadas es: ' + str(ciudades[0]) + ' y los datos de la última ciudad cargada son: ')
+        print(ciudades[1])
+        print('\n')
+
+        print('El total de aeropuertos cargados es: ' + str(airports[0]) + ' y los datos del primer aeropuerto cargado son: ')
+        print(airports[1])
+        print('\n')
 
         print('El limite de recursion actual es: ' + str(sys.getrecursionlimit()))
 
