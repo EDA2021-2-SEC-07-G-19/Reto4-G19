@@ -53,9 +53,9 @@ def printMenu():
     print('0- Salir')
     print("*******************************************")
 
-routesfile = 'routes_full.csv'
-airportsfile = 'airports_full.csv'
-cityfile = 'worldcities.csv'
+routesfile = 'routes-utf8-small.csv'
+airportsfile = 'airports-utf8-small.csv'
+cityfile = 'worldcities-utf8.csv'
 cont = None
 
 """

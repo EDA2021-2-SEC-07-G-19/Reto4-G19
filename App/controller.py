@@ -24,7 +24,6 @@ import config as cf
 import model
 import csv
 
-
 """
 El controlador se encarga de mediar entre la vista y el modelo.
 """
@@ -33,15 +32,26 @@ El controlador se encarga de mediar entre la vista y el modelo.
 #======================================
 def Init():
     analyzer = model.newAnalyzer()
+    
     return analyzer
 
 #=================================
 # Funciones para la carga de datos
 #=================================
 def loadData(analyzer, routesfile, airportsfile, cityfile):
+    loadDataAirports(analyzer, airportsfile)
     loadDataRoutes(analyzer, routesfile)
     loadDataCiudades(analyzer, cityfile)
-    loadDataAirports(analyzer, airportsfile)
+
+def loadDataAirports(analyzer, airportsfile):
+    airportsfile = cf.data_dir + airportsfile
+    input_file = csv.DictReader(open(airportsfile, encoding="utf-8"))
+
+    for airport in input_file:
+        model.addAirport(analyzer, airport)
+        model.addAirportList(analyzer, airport)
+
+    return analyzer
 
 def loadDataRoutes(analyzer, routesfile):
     routesfile = cf.data_dir + routesfile
@@ -50,8 +60,7 @@ def loadDataRoutes(analyzer, routesfile):
     
     for route in input_file:
         model.addRoute(analyzer, route)
-        model.addConnection(analyzer, route)
-        model.addRouteConnectionND(analyzer, route)
+        model.addAirportRouteND(analyzer, route)
 
     return analyzer
 
@@ -64,16 +73,6 @@ def loadDataCiudades(analyzer, cityfile):
         model.addCity2(analyzer, city)
 
     return analyzer
-
-def loadDataAirports(analyzer, airportsfile):
-    airportsfile = cf.data_dir + airportsfile
-    input_file = csv.DictReader(open(airportsfile, encoding="utf-8"))
-
-    for airport in input_file:
-        model.addAirport(analyzer, airport)
-
-    return analyzer
-
 
 #==========================
 # Funciones de ordenamiento
@@ -106,5 +105,6 @@ def TotalCiudades(analyzer):
 
     return model.TotalCiudades(analyzer)
 
-def getCity(cont, city):
-    return model.getCity(cont, city)
+def getCity(analyzer, city):
+    
+    return model.getCity(analyzer, city)

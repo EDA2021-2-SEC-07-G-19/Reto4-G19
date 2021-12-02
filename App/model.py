@@ -43,20 +43,20 @@ los mismos.
 # Construccion de modelos
 #========================
 def newAnalyzer():
-    analyzer = {'routes': None,
+    analyzer = {'digrafo': None,
+                'nodirigido': None,
                 'airports': None,
-                'noDirigido': None,
                 'ciudades': None,
                 'lt_airports': None,
                 'lt_ciudades': None,
                 }
 
-    analyzer['routes'] = gr.newGraph(datastructure = 'ADJ_LIST', 
+    analyzer['digrafo'] = gr.newGraph(datastructure = 'ADJ_LIST', 
                                      directed = True,
                                      size = 4000,
                                      comparefunction = cmpRouteIds)
 
-    analyzer['noDirigido'] = gr.newGraph(datastructure = 'ADJ_LIST', 
+    analyzer['nodirigido'] = gr.newGraph(datastructure = 'ADJ_LIST', 
                                          directed = False,
                                          size = 4000,
                                          comparefunction = cmpRouteIds)
@@ -64,9 +64,10 @@ def newAnalyzer():
     analyzer['airports'] = mp.newMap(maptype = 'PROBING',
                                      loadfactor = 0.5,
                                      comparefunction = cmpMapAirport)
-    analyzer['ciudades']=mp.newMap(maptype = 'PROBING',
-                                     loadfactor = 0.5,
-                                     comparefunction = cmpMapCiudades)
+    
+    analyzer['ciudades'] = mp.newMap(maptype = 'PROBING',
+                                   loadfactor = 0.5,
+                                   comparefunction = cmpMapCiudades)
 
     analyzer['lt_airports'] = lt.newList(datastructure = 'ARRAY_LIST', cmpfunction = cmpListIATA)
     
@@ -77,64 +78,37 @@ def newAnalyzer():
 #===============================================
 # Funciones para agregar informacion al catalogo
 #===============================================
-def addRoute(analyzer, route):
-    if not gr.containsVertex(analyzer['routes'], route['Departure']):
-        gr.insertVertex(analyzer['routes'], route['Departure'])
-
-    if not gr.containsVertex(analyzer['routes'], route['Destination']):
-        gr.insertVertex(analyzer['routes'], route['Destination'])
-    
-    return analyzer
-
-def addConnection(analyzer, route):
-    edge = gr.getEdge(analyzer['routes'], route['Departure'], route['Destination'])
-    if edge is None:
-        gr.addEdge(analyzer['routes'], route['Departure'], route['Destination'], route['distance_km'])
-    
-    return analyzer
-
-def addRouteConnectionND(analyzer, route):
-    aero1 = route['Departure']
-    aero2 = route['Destination']
-
-    arco1 = gr.getEdge(analyzer['routes'], aero1, aero2)
-    arco2 = gr.getEdge(analyzer['routes'], aero2, aero1)
-
-    if (arco1 != None) and (arco2 != None):
-        if not gr.containsVertex(analyzer['noDirigido'], aero1):
-            gr.insertVertex(analyzer['noDirigido'], aero1)
-
-        if not gr.containsVertex(analyzer['noDirigido'], aero2):
-            gr.insertVertex(analyzer['noDirigido'], aero2)
-        
-        gr.addEdge(analyzer['noDirigido'], aero1, aero2, 0)
-
-    return analyzer
-
-def addRouteConnectionND(analyzer, route):
-    aero1 = route['Departure']
-    aero2 = route['Destination']
-
-    arco1 = gr.getEdge(analyzer['routes'], aero1, aero2)
-    arco2 = gr.getEdge(analyzer['routes'], aero2, aero1)
-
-    if (arco1 != None) and (arco2 != None):
-        if not gr.containsVertex(analyzer['noDirigido'], aero1):
-            gr.insertVertex(analyzer['noDirigido'], aero1)
-
-        if not gr.containsVertex(analyzer['noDirigido'], aero2):
-            gr.insertVertex(analyzer['noDirigido'], aero2)
-        
-        gr.addEdge(analyzer['noDirigido'], aero1, aero2, 0)
-
-    return analyzer
-
 def addAirport(analyzer, airport):
+    if not gr.containsVertex(analyzer['digrafo'], airport['IATA']):
+        gr.insertVertex(analyzer['digrafo'], airport['IATA'])
+
+    if not gr.containsVertex(analyzer['nodirigido'], airport['IATA']):
+        gr.insertVertex(analyzer['nodirigido'], airport['IATA'])
+    
+    return analyzer
+
+def addRoute(analyzer, route):
+    gr.addEdge(analyzer['digrafo'], route['Departure'], route['Destination'], route['distance_km'])
+    
+    return analyzer
+
+def addAirportRouteND(analyzer, route):
+    aero1 = route['Departure']
+    aero2 = route['Destination']
+
+    arco1 = gr.getEdge(analyzer['digrafo'], aero1, aero2)
+    arco2 = gr.getEdge(analyzer['digrafo'], aero2, aero1)
+
+    if (arco1 != None) and (arco2 != None):     
+        gr.addEdge(analyzer['nodirigido'], aero1, aero2, 0)
+
+    return analyzer
+
+def addAirportList(analyzer, airport):
     lt.addLast(analyzer['lt_airports'], airport)
 
 def addCity2(analyzer, city):
     lt.addLast(analyzer['lt_ciudades'], city)
-
 
 def addCity(analyzer, ciudad, ciudadUnica):
     ciudades = analyzer['ciudades']
@@ -158,21 +132,22 @@ def addCity(analyzer, ciudad, ciudadUnica):
 #======================
 def totalAirports(analyzer):
 
-    return gr.numVertices(analyzer['routes'])
+    return gr.numVertices(analyzer['digrafo'])
 
 def totalConnections(analyzer):
 
-    return gr.numEdges(analyzer['routes'])
+    return gr.numEdges(analyzer['digrafo'])
 
 def totalAirports2(analyzer):
 
-    return gr.numVertices(analyzer['noDirigido'])
+    return gr.numVertices(analyzer['nodirigido'])
 
 def totalConnections2(analyzer):
 
-    return gr.numEdges(analyzer['noDirigido'])
+    return gr.numEdges(analyzer['nodirigido'])
 
 def getCity(analyzer, city):
+    
     return me.getValue(mp.get(analyzer['ciudades'],city))
 
 def TotalAirports(analyzer):
@@ -188,6 +163,7 @@ def TotalCiudades(analyzer):
     ultima_ciudad = lt.getElement(lt_ciudades, total_ciudades)
 
     return total_ciudades, ultima_ciudad
+
 #=================================================================
 # Funciones utilizadas para comparar elementos dentro de una lista
 #=================================================================
@@ -214,14 +190,6 @@ def cmpMapCiudades(keyname, airport):
     if (keyname == airport_entry):
         return 0
     elif (keyname > airport_entry):
-        return 1
-    else:
-        return -1
-def cmpRouteIds(route, keyvalueroute):
-    routecode = keyvalueroute['key']
-    if (route == routecode):
-        return 0
-    elif (route > routecode):
         return 1
     else:
         return -1
