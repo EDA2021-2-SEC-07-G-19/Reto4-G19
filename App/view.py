@@ -104,7 +104,52 @@ while True:
         pass
 
     elif int(inputs[0]) == 4:
-        pass
+        ciudadO= input('dar nombre de la ciudad de origen que se desea consultar')
+        listaHomonimos=controller.getCity(cont,ciudadO)
+        tablaO = pt.PrettyTable(['index','city', 'latitud', 'longitud', 'country'])
+        tablaO.max_width = 8
+
+        for i in range(1,lt.size(listaHomonimos)+1):
+            city = lt.getElement(listaHomonimos,i)
+            tablaO.add_row([i,city['city'], city['lat'], city['lng'], city['country']])
+        tablaO.hrules = ALL
+        print(tablaO)
+
+        indice=input('Seleccione la ciudad que desea utilizando el numero de indice')
+        ciudadOElegida= lt.getElement(listaHomonimos, int(indice))
+        print('la ciudad elegida es: ' )
+
+        tablaOE = pt.PrettyTable(['city', 'latitud', 'longitud', 'country', 'iso2', 'iso3'])
+        tablaO.max_width = 8
+        tablaOE.add_row([ciudadOElegida['city'], ciudadOElegida['lat'], ciudadOElegida['lng'], ciudadOElegida['country'], ciudadOElegida['iso2'], ciudadOElegida['iso3'] ])
+        tablaOE.hrules = ALL
+        print(tablaOE)
+
+        ##Ciudad destino
+
+        ciudadD= input('dar nombre de la ciudad de destino que se desea consultar')
+        listaHomonimos2=controller.getCity(cont,ciudadD)
+
+        tablaD = pt.PrettyTable(['index','city', 'latitud', 'longitud', 'country'])
+        tablaD.max_width = 8
+
+        for i in range(1,lt.size(listaHomonimos2)+1):
+            city = lt.getElement(listaHomonimos2,i)
+            tablaD.add_row([i,city['city'], city['lat'], city['lng'], city['country']])
+        tablaD.hrules = ALL
+        print(tablaD)
+
+        indice=input('Seleccione la ciudad que desea utilizando el numero de indice')
+        ciudadDElegida= lt.getElement(listaHomonimos2, int(indice))
+        print('la ciudad elegida es: ' )
+
+        tablaDE = pt.PrettyTable(['city', 'latitud', 'longitud', 'country', 'iso2', 'iso3'])
+        tablaD.max_width = 8
+        tablaDE.add_row([ciudadOElegida['city'], ciudadOElegida['lat'], ciudadOElegida['lng'], ciudadOElegida['country'], ciudadOElegida['iso2'], ciudadOElegida['iso3'] ])
+        tablaDE.hrules = ALL
+        print(tablaDE)
+
+
 
     elif int(inputs[0]) == 5:
         pass

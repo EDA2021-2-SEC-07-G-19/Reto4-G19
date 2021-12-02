@@ -60,7 +60,8 @@ def loadDataCiudades(analyzer, cityfile):
     input_file = csv.DictReader(open(cityfile, encoding="utf-8"))
 
     for city in input_file:
-        model.addCity(analyzer, city)
+        model.addCity(analyzer, city['city'], city)
+        model.addCity2(analyzer, city)
 
     return analyzer
 
@@ -72,6 +73,7 @@ def loadDataAirports(analyzer, airportsfile):
         model.addAirport(analyzer, airport)
 
     return analyzer
+
 
 #==========================
 # Funciones de ordenamiento
@@ -103,3 +105,6 @@ def TotalAirports(map_airports):
 def TotalCiudades(analyzer):
 
     return model.TotalCiudades(analyzer)
+
+def getCity(cont, city):
+    return model.getCity(cont, city)
