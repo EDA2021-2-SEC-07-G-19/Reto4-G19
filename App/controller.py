@@ -48,7 +48,7 @@ def loadDataAirports(analyzer, airportsfile):
     input_file = csv.DictReader(open(airportsfile, encoding="utf-8"))
 
     for airport in input_file:
-        model.addAirport(analyzer, airport)
+        model.addAirportGraphs(analyzer, airport)
         model.addAirportList(analyzer, airport)
 
     return analyzer
@@ -59,8 +59,9 @@ def loadDataRoutes(analyzer, routesfile):
                                 delimiter=",")
     
     for route in input_file:
-        model.addRoute(analyzer, route)
+        model.addRouteDiGraph(analyzer, route)
         model.addAirportRouteND(analyzer, route)
+        model.addRouteList(analyzer, route)
 
     return analyzer
 
@@ -69,8 +70,8 @@ def loadDataCiudades(analyzer, cityfile):
     input_file = csv.DictReader(open(cityfile, encoding="utf-8"))
 
     for city in input_file:
-        model.addCity(analyzer, city['city'], city)
-        model.addCity2(analyzer, city)
+        model.addCityMap(analyzer, city['city'], city)
+        model.addCityList(analyzer, city)
 
     return analyzer
 
@@ -89,6 +90,14 @@ def getVerticesGraph(analyzer):
 
     return model.getVerticesGraph(analyzer)
 
+def getDataIATA(analyzer, iata):
+
+    return model.getDataIATA(analyzer, iata)
+
+def getCity(analyzer, city):
+    
+    return model.getCity(analyzer, city)
+
 def TotalVerticesDiGraph(analyzer):
 
     return model.TotalVerticesDiGraph(analyzer)
@@ -105,14 +114,14 @@ def TotalEdgesGraph(analyzer):
 
     return model.TotalEdgesGraph(analyzer)
 
-def TotalAirports(map_airports):
-
-    return model.TotalAirports(map_airports)
-
 def TotalCiudades(analyzer):
 
     return model.TotalCiudades(analyzer)
 
-def getCity(analyzer, city):
-    
-    return model.getCity(analyzer, city)
+def TotalRoutesDiGraph(analyzer):
+
+    return model.TotalRoutesDiGraph(analyzer)
+
+def Requerimiento4(analyzer, ciudad, millas):
+
+    return model.Requerimiento4(analyzer, ciudad, millas)

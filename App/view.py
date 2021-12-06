@@ -24,6 +24,7 @@ import config as cf
 import sys
 import controller
 from DISClib.ADT import list as lt
+import time
 import prettytable as pt
 from prettytable import PrettyTable, ALL
 assert cf
@@ -77,7 +78,9 @@ while True:
         numvertex = controller.TotalVerticesDiGraph(cont)
         print('Nodes: ' + str(numvertex) + ' loaded airports.')
         numedges = controller.TotalEdgesDiGraph(cont)
-        print('Edges: ' + str(numedges) + ' loaded routes.')
+        print('Edges: ' + str(numedges) + ' loaded edges.')
+        numroutes = controller.TotalRoutesDiGraph(cont)
+        print('Routes: ' + str(numroutes) + ' loaded routes.')
         print('First & Last Airport loaded in DiGraph.')
 
         tabla1 = pt.PrettyTable(['IATA', 'Name', 'City', 'Country', 'Latitude', 'Longitude'])
@@ -92,10 +95,10 @@ while True:
         print('\n')
 
         print('=== Airports-Routes Graph ===')
-        numvertex = controller.TotalVerticesGraph(cont)
-        print('Nodes: ' + str(numvertex) + ' loaded airports.')
-        numedges = controller.TotalEdgesGraph(cont)
-        print('Edges: ' + str(numedges) + ' loaded routes.')
+        numvertex2 = controller.TotalVerticesGraph(cont)
+        print('Nodes: ' + str(numvertex2) + ' loaded airports.')
+        numedges2 = controller.TotalEdgesGraph(cont)
+        print('Edges: ' + str(numedges2) + ' loaded edges.')
         print('First & Last Airport loaded in Graph.')
 
         tabla1_1 = pt.PrettyTable(['IATA', 'Name', 'City', 'Country', 'Latitude', 'Longitude'])
@@ -131,10 +134,16 @@ while True:
         pass
 
     elif int(inputs[0]) == 4:
-        ciudadO= input('dar nombre de la ciudad de origen que se desea consultar')
-        listaHomonimos=controller.getCity(cont,ciudadO)
-        tablaO = pt.PrettyTable(['index','city', 'latitud', 'longitud', 'country'])
-        tablaO.max_width = 8
+        pass
+
+    elif int(inputs[0]) == 5:
+
+        #Ciudad Origen
+
+        ciudadO = input('Dar nombre de la ciudad de origen que se desea consultar: ')
+        listaHomonimos = controller.getCity(cont,ciudadO)
+        tablaO = pt.PrettyTable(['Index','City', 'Latitude', 'Longitude', 'Country'])
+        tablaO.max_width = 20
 
         for i in range(1,lt.size(listaHomonimos)+1):
             city = lt.getElement(listaHomonimos,i)
@@ -142,23 +151,23 @@ while True:
         tablaO.hrules = ALL
         print(tablaO)
 
-        indice=input('Seleccione la ciudad que desea utilizando el numero de indice')
-        ciudadOElegida= lt.getElement(listaHomonimos, int(indice))
-        print('la ciudad elegida es: ' )
+        indice = input('Seleccione la ciudad que desea utilizando el numero de indice: ')
+        ciudadOElegida = lt.getElement(listaHomonimos, int(indice))
+        print('La ciudad elegida es: ' )
 
-        tablaOE = pt.PrettyTable(['city', 'latitud', 'longitud', 'country', 'iso2', 'iso3'])
-        tablaO.max_width = 8
+        tablaOE = pt.PrettyTable(['City', 'Latitude', 'Longitude', 'Country', 'iso2', 'iso3'])
+        tablaO.max_width = 20
         tablaOE.add_row([ciudadOElegida['city'], ciudadOElegida['lat'], ciudadOElegida['lng'], ciudadOElegida['country'], ciudadOElegida['iso2'], ciudadOElegida['iso3'] ])
         tablaOE.hrules = ALL
         print(tablaOE)
 
         ##Ciudad destino
 
-        ciudadD= input('dar nombre de la ciudad de destino que se desea consultar')
-        listaHomonimos2=controller.getCity(cont,ciudadD)
+        ciudadD = input('Dar nombre de la ciudad de destino que se desea consultar: ')
+        listaHomonimos2 = controller.getCity(cont,ciudadD)
 
-        tablaD = pt.PrettyTable(['index','city', 'latitud', 'longitud', 'country'])
-        tablaD.max_width = 8
+        tablaD = pt.PrettyTable(['Index','City', 'Latitude', 'Longitude', 'Country'])
+        tablaD.max_width = 20
 
         for i in range(1,lt.size(listaHomonimos2)+1):
             city = lt.getElement(listaHomonimos2,i)
@@ -166,23 +175,49 @@ while True:
         tablaD.hrules = ALL
         print(tablaD)
 
-        indice=input('Seleccione la ciudad que desea utilizando el numero de indice')
+        indice=input('Seleccione la ciudad que desea utilizando el numero de indice: ')
         ciudadDElegida= lt.getElement(listaHomonimos2, int(indice))
-        print('la ciudad elegida es: ' )
+        print('La ciudad elegida es: ' )
 
-        tablaDE = pt.PrettyTable(['city', 'latitud', 'longitud', 'country', 'iso2', 'iso3'])
-        tablaD.max_width = 8
+        tablaDE = pt.PrettyTable(['City', 'Latitude', 'Longitude', 'Country', 'iso2', 'iso3'])
+        tablaD.max_width = 20
         tablaDE.add_row([ciudadOElegida['city'], ciudadOElegida['lat'], ciudadOElegida['lng'], ciudadOElegida['country'], ciudadOElegida['iso2'], ciudadOElegida['iso3'] ])
         tablaDE.hrules = ALL
         print(tablaDE)
 
-
-
-    elif int(inputs[0]) == 5:
-        pass
-
     elif int(inputs[0]) == 6:
-        pass
+        
+        ciudad = input('Ingrese la ciudad de origen (su código IATA): ')
+        millas = input('Ingrese el número de millas que tiene: ')
+        millas = float(millas)
+        print('\n')
+
+        start_time = time.process_time()
+
+        requerimiento4 = controller.Requerimiento4(cont, ciudad, millas)
+
+        stop_time = time.process_time()
+
+        elapsed_time_mseg = round((stop_time - start_time)*1000,2)
+
+        print('El tiempo de procesamiento del requerimiento elegido es: ' + str(elapsed_time_mseg) + ' ms' + '\n')
+
+        print('=============== Req No. 4 Inputs ===============')
+        print('Departure IATA Code: ' + str(ciudad))
+        print('Available trave miles: ' + str(millas) + '\n')
+
+        print('=============== Req No. 4 Answer ===============')
+        print('+++ Departure Airport for IATA Code: ' + str(ciudad) + ' +++')
+
+        tabla1_req4 = pt.PrettyTable(['IATA', 'Name', 'City', 'Country'])
+        tabla1_2.max_width = 20
+        airport = controller.getDataIATA(cont, ciudad)
+        tabla1_req4.add_row([airport['IATA'], airport['Name'], airport['City'], airport['Country']])
+        tabla1_req4.hrules = ALL
+        print(tabla1_req4)
+        print('\n')
+
+        print('- Number of possible airports: ' + str(requerimiento4))
 
     elif int(inputs[0]) == 8:
         pass
