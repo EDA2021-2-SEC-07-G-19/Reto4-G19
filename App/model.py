@@ -121,7 +121,7 @@ def addCity(analyzer, ciudad, ciudadUnica):
         mp.put(ciudades, ciudad, ciudad_actual)
     lt.addLast(ciudad_actual, ciudadUnica)
 
-    return 
+    return ciudades
 
 #=================================
 # Funciones para creacion de datos
@@ -130,19 +130,73 @@ def addCity(analyzer, ciudad, ciudadUnica):
 #======================
 # Funciones de consulta
 #======================
-def totalAirports(analyzer):
+def getVerticesDiGraph(analyzer):
+    digraph = analyzer['digrafo']
+    vertices = gr.vertices(digraph)
+    tam_vertices = lt.size(vertices)
+    prim_ult = lt.newList(datastructure = 'ARRAY_LIST')
+    prim = lt.getElement(vertices, 0)
+    lt.addLast(prim_ult, prim)
+    ult = lt.getElement(vertices, tam_vertices)
+    lt.addLast(prim_ult, ult)
+
+    lt_airports = analyzer['lt_airports']
+    tam_lt_airports = lt.size(lt_airports)
+    lt_rta = lt.newList(datastructure = 'ARRAY_LIST')
+    for iata in lt.iterator(prim_ult):
+        i = 0
+        encontrar = False
+        while i < tam_lt_airports and encontrar == False:
+            airport = lt.getElement(lt_airports, i)
+            iata2 = airport['IATA']
+            if str(iata) == str(iata2):
+                lt.addLast(lt_rta, airport)
+                encontrar = True
+            
+            i += 1
+
+    return lt_rta
+
+def getVerticesGraph(analyzer):
+    graph = analyzer['nodirigido']
+    vertices = gr.vertices(graph)
+    tam_vertices = lt.size(vertices)
+    prim_ult = lt.newList(datastructure = 'ARRAY_LIST')
+    prim = lt.getElement(vertices, 0)
+    lt.addLast(prim_ult, prim)
+    ult = lt.getElement(vertices, tam_vertices)
+    lt.addLast(prim_ult, ult)
+
+    lt_airports = analyzer['lt_airports']
+    tam_lt_airports = lt.size(lt_airports)
+    lt_rta = lt.newList(datastructure = 'ARRAY_LIST')
+    for iata in lt.iterator(prim_ult):
+        i = 0
+        encontrar = False
+        while i < tam_lt_airports and encontrar == False:
+            airport = lt.getElement(lt_airports, i)
+            iata2 = airport['IATA']
+            if str(iata) == str(iata2):
+                lt.addLast(lt_rta, airport)
+                encontrar = True
+            
+            i += 1
+
+    return lt_rta
+
+def TotalVerticesDiGraph(analyzer):
 
     return gr.numVertices(analyzer['digrafo'])
 
-def totalConnections(analyzer):
+def TotalEdgesDiGraph(analyzer):
 
     return gr.numEdges(analyzer['digrafo'])
 
-def totalAirports2(analyzer):
+def TotalVerticesGraph(analyzer):
 
     return gr.numVertices(analyzer['nodirigido'])
 
-def totalConnections2(analyzer):
+def TotalEdgesGraph(analyzer):
 
     return gr.numEdges(analyzer['nodirigido'])
 
@@ -160,9 +214,13 @@ def TotalAirports(analyzer):
 def TotalCiudades(analyzer):
     lt_ciudades = analyzer['lt_ciudades']
     total_ciudades = lt.size(lt_ciudades)
+    primera_ciudad = lt.getElement(lt_ciudades, 1)
     ultima_ciudad = lt.getElement(lt_ciudades, total_ciudades)
+    lt_rta = lt.newList(datastructure = 'ARRAY_LIST')
+    lt.addLast(lt_rta, primera_ciudad)
+    lt.addLast(lt_rta, ultima_ciudad)
 
-    return total_ciudades, ultima_ciudad
+    return total_ciudades, lt_rta
 
 #=================================================================
 # Funciones utilizadas para comparar elementos dentro de una lista

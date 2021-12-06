@@ -69,33 +69,60 @@ while True:
         cont = controller.Init()
 
     elif int(inputs[0]) == 2:
-        print("\nCargando información de aeropuertos y rutas ....")
+        print('\nCargando información de aeropuertos y rutas ....')
+        print('\n')
         controller.loadData(cont, routesfile, airportsfile, cityfile)
 
-        numvertex = controller.totalAirports(cont)
-        numedges = controller.totalConnections(cont)
+        print('=== Airports-Routes DiGraph ===')
+        numvertex = controller.TotalVerticesDiGraph(cont)
+        print('Nodes: ' + str(numvertex) + ' loaded airports.')
+        numedges = controller.TotalEdgesDiGraph(cont)
+        print('Edges: ' + str(numedges) + ' loaded routes.')
+        print('First & Last Airport loaded in DiGraph.')
 
-        numvertex2 = controller.totalAirports2(cont)
-        numedges2 = controller.totalConnections2(cont)
+        tabla1 = pt.PrettyTable(['IATA', 'Name', 'City', 'Country', 'Latitude', 'Longitude'])
+        tabla1.max_width = 20
+        prim_ult = controller.getVerticesDiGraph(cont)
 
-        airports = controller.TotalAirports(cont)
+        for airport in lt.iterator(prim_ult):
+            tabla1.add_row([airport['IATA'], airport['Name'], airport['City'], airport['Country'], airport['Latitude'], airport['Longitude']])
 
-        ciudades = controller.TotalCiudades(cont)
-
-        print('Número de aeropuertos en el dígrafo: ' + str(numvertex))
-        print('Número de rutas aereas en el dígrafo: ' + str(numedges))
+        tabla1.hrules = ALL
+        print(tabla1)
         print('\n')
 
-        print('Número de aeropuertos en el grafo no dirigido: ' + str(numvertex2))
-        print('Número de rutas aereas en el grafo no dirigido: ' + str(numedges2))
+        print('=== Airports-Routes Graph ===')
+        numvertex = controller.TotalVerticesGraph(cont)
+        print('Nodes: ' + str(numvertex) + ' loaded airports.')
+        numedges = controller.TotalEdgesGraph(cont)
+        print('Edges: ' + str(numedges) + ' loaded routes.')
+        print('First & Last Airport loaded in Graph.')
+
+        tabla1_1 = pt.PrettyTable(['IATA', 'Name', 'City', 'Country', 'Latitude', 'Longitude'])
+        tabla1_1.max_width = 20
+        prim_ult = controller.getVerticesGraph(cont)
+
+        for airport in lt.iterator(prim_ult):
+            tabla1_1.add_row([airport['IATA'], airport['Name'], airport['City'], airport['Country'], airport['Latitude'], airport['Longitude']])
+
+        tabla1_1.hrules = ALL
+        print(tabla1_1)
         print('\n')
 
-        print('El total de ciudades cargadas es: ' + str(ciudades[0]) + ' y los datos de la última ciudad cargada son: ')
-        print(ciudades[1])
-        print('\n')
+        print('=== City Network ===')
+        total_ciudades = controller.TotalCiudades(cont)
+        print('The number of cities are: ' + str(total_ciudades[0]))
+        print('First & Last cities loaded in data structure.')
 
-        print('El total de aeropuertos cargados es: ' + str(airports[0]) + ' y los datos del primer aeropuerto cargado son: ')
-        print(airports[1])
+        tabla1_2 = pt.PrettyTable(['City', 'Country', 'Latitude', 'Longitude', 'Population'])
+        tabla1_2.max_width = 20
+        prim_ult = controller.TotalCiudades(cont)
+
+        for city in lt.iterator(prim_ult[1]):
+            tabla1_2.add_row([city['city'], city['country'], city['lat'], city['lng'], city['population']])
+
+        tabla1_2.hrules = ALL
+        print(tabla1_2)
         print('\n')
 
         print('El limite de recursion actual es: ' + str(sys.getrecursionlimit()))

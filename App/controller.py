@@ -81,21 +81,29 @@ def loadDataCiudades(analyzer, cityfile):
 #========================================
 # Funciones de consulta sobre el catálogo
 #========================================
-def totalAirports(analyzer):
+def getVerticesDiGraph(analyzer):
 
-    return model.totalAirports(analyzer)
+    return model.getVerticesDiGraph(analyzer)
 
-def totalConnections(analyzer):
+def getVerticesGraph(analyzer):
 
-    return model.totalConnections(analyzer)
+    return model.getVerticesGraph(analyzer)
 
-def totalAirports2(analyzer):
+def TotalVerticesDiGraph(analyzer):
 
-    return model.totalAirports2(analyzer)
+    return model.TotalVerticesDiGraph(analyzer)
 
-def totalConnections2(analyzer):
+def TotalEdgesDiGraph(analyzer):
 
-    return model.totalConnections2(analyzer)
+    return model.TotalEdgesDiGraph(analyzer)
+
+def TotalVerticesGraph(analyzer):
+
+    return model.TotalVerticesGraph(analyzer)
+
+def TotalEdgesGraph(analyzer):
+
+    return model.TotalEdgesGraph(analyzer)
 
 def TotalAirports(map_airports):
 
