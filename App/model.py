@@ -147,6 +147,32 @@ def Requerimiento4(analyzer, ciudad, millas):
 
     return total_distancia, total_millas_km
 
+def Requerimiento5(analyzer, ciudad):
+    digraph = analyzer['digrafo']
+    adyacentes = gr.adjacents(digraph, ciudad)
+    total_afectados = lt.size(adyacentes)
+
+    primeros_3 = lt.newList(datastructure = 'ARRAY_LIST')
+    ultimos_3 = lt.newList(datastructure = 'ARRAY_LIST')
+
+    if total_afectados <= 6:
+        primeros_3 = adyacentes
+
+    else:
+        i = 1
+        while i <= 3:
+            x = lt.getElement(adyacentes, i)
+            lt.addLast(primeros_3, x)
+            i += 1
+
+        j = 2
+        while j >= 0:
+            x = lt.getElement(adyacentes, total_afectados - j)
+            lt.addLast(ultimos_3, x)
+            j -= 1
+
+    return primeros_3, ultimos_3, total_afectados
+
 #======================
 # Funciones de consulta
 #======================
@@ -220,6 +246,27 @@ def getDataIATA(analyzer, iata):
         i += 1
 
     return rta
+
+def getDataIATAList(analyzer, lista_iata):
+    lt_rta = lt.newList(datastructure = 'ARRAY_LIST')
+    lt_airports = analyzer['lt_airports']
+    tam_lt_airports = lt.size(lt_airports)
+    lista_iata = ms.sort(lista_iata, cmpAirportsAlfa)
+    
+    for iata in lt.iterator(lista_iata): 
+        i = 0
+        encontrar = False
+
+        while i < tam_lt_airports and encontrar == False:
+            airport = lt.getElement(lt_airports, i)
+            iata2 = airport['IATA']
+            if str(iata) == str(iata2):
+                lt.addLast(lt_rta, airport)
+                encontrar = True
+        
+            i += 1
+
+    return lt_rta
 
 def getCity(analyzer, city):
     
@@ -316,5 +363,13 @@ def cmpListRoute(route1, route2):
         return 1
     else:
         return -1
+
+def cmpAirportsAlfa(iata1, iata2):
+    if iata1 == iata2:
+        return 0
+    elif iata1 < iata2:
+        return 1
+    else:
+        return 0
 
 

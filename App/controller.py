@@ -94,6 +94,10 @@ def getDataIATA(analyzer, iata):
 
     return model.getDataIATA(analyzer, iata)
 
+def getDataIATAList(analyzer, lista_iata):
+
+    return model.getDataIATAList(analyzer, lista_iata)
+
 def getCity(analyzer, city):
     
     return model.getCity(analyzer, city)
@@ -125,3 +129,7 @@ def TotalRoutesDiGraph(analyzer):
 def Requerimiento4(analyzer, ciudad, millas):
 
     return model.Requerimiento4(analyzer, ciudad, millas)
+
+def Requerimiento5(analyzer, ciudad):
+
+    return model.Requerimiento5(analyzer, ciudad)

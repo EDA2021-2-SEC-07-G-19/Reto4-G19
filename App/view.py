@@ -220,6 +220,53 @@ while True:
         print('- Number of possible airports: ' + str(0))
         print('- Max traveling distance between airports: ' + str(requerimiento4[0]) + ' (km)')
         print('- Passenger available traveling miles: ' + str(requerimiento4[1]) + ' (km)')
+        print('\n')
+
+        print('+++ Longest possible route with airport ' + str(ciudad) + ' +++')
+        print('- Longest possible path distance: ' + str(0) + ' (km)')
+        print('- Longest possible path details:')
+
+    elif int(inputs[0]) == 7:
+
+        ciudad = input('Ingrese el aeropuerto que está fuera de funcionamiento (su código IATA): ')
+        print('\n')
+
+        start_time = time.process_time()
+
+        requerimiento5 = controller.Requerimiento5(cont, ciudad)
+
+        stop_time = time.process_time()
+
+        elapsed_time_mseg = round((stop_time - start_time)*1000,2)
+
+        print('El tiempo de procesamiento del requerimiento elegido es: ' + str(elapsed_time_mseg) + ' ms' + '\n')
+
+        print('=============== Req No. 5 Inputs ===============')
+        print('Closing the airport with IATA code: ' + str(ciudad))
+        print('\n')
+
+        print('=============== Req No. 5 Answer ===============')
+        print('There are ' + str(requerimiento5[2]) + ' airports affected by the removal of: ' + str(ciudad))
+        print('The first & last 3 airports affected are:')
+        primeros_3 = controller.getDataIATAList(cont, requerimiento5[0])
+        ultimos_3 = controller.getDataIATAList(cont, requerimiento5[1])
+
+        tabla_req5 = pt.PrettyTable(['IATA', 'Name', 'City', 'Country'])
+        tabla_req5.max_width = 30
+
+        if lt.size(primeros_3) > 3:
+            for airport in lt.iterator(primeros_3):
+                tabla_req5.add_row([airport['IATA'], airport['Name'], airport['City'], airport['Country']])
+
+        else:
+            for airport in lt.iterator(primeros_3):
+                tabla_req5.add_row([airport['IATA'], airport['Name'], airport['City'], airport['Country']])
+
+            for airport in lt.iterator(ultimos_3):
+                tabla_req5.add_row([airport['IATA'], airport['Name'], airport['City'], airport['Country']])            
+
+        tabla_req5.hrules = ALL
+        print(tabla_req5)
 
     elif int(inputs[0]) == 8:
         pass
