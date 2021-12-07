@@ -72,7 +72,16 @@ while True:
     elif int(inputs[0]) == 2:
         print('\nCargando información de aeropuertos y rutas ....')
         print('\n')
+
+        start_time = time.process_time()
+
         controller.loadData(cont, routesfile, airportsfile, cityfile)
+
+        stop_time = time.process_time()
+
+        elapsed_time_mseg = round((stop_time - start_time)*1000,2)
+
+        print('El tiempo de procesamiento de la carga de datos es: ' + str(elapsed_time_mseg) + ' ms' + '\n')
 
         print('=== Airports-Routes DiGraph ===')
         numvertex = controller.TotalVerticesDiGraph(cont)
