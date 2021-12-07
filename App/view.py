@@ -217,7 +217,9 @@ while True:
         print(tabla1_req4)
         print('\n')
 
-        print('- Number of possible airports: ' + str(requerimiento4))
+        print('- Number of possible airports: ' + str(0))
+        print('- Max traveling distance between airports: ' + str(requerimiento4[0]) + ' (km)')
+        print('- Passenger available traveling miles: ' + str(requerimiento4[1]) + ' (km)')
 
     elif int(inputs[0]) == 8:
         pass

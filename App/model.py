@@ -104,7 +104,7 @@ def addAirportRouteND(analyzer, route):
     nd = analyzer['nodirigido']
     aero1 = route['Departure']
     aero2 = route['Destination']
-    distancia = route['distance_km']
+    distancia = float(route['distance_km'])
 
     edge1 = gr.getEdge(digraph, aero1, aero2)
     edge2 = gr.getEdge(digraph, aero2, aero1)
@@ -140,10 +140,12 @@ def addCityMap(analyzer, ciudad, ciudadUnica):
 # Funciones para creacion de datos
 #=================================
 def Requerimiento4(analyzer, ciudad, millas):
-    digraph = analyzer['digrafo']
+    digraph = analyzer['nodirigido']
     estruc_prim = prim.PrimMST(digraph)
+    total_distancia = round(prim.weightMST(digraph, estruc_prim), 2)
+    total_millas_km = round(millas*1.6, 2)
 
-    return 
+    return total_distancia, total_millas_km
 
 #======================
 # Funciones de consulta
