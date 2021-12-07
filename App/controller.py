@@ -23,6 +23,7 @@
 import config as cf
 import model
 import csv
+from DISClib.ADT import list as lt
 
 """
 El controlador se encarga de mediar entre la vista y el modelo.
@@ -60,8 +61,11 @@ def loadDataRoutes(analyzer, routesfile):
     
     for route in input_file:
         model.addRouteDiGraph(analyzer, route)
-        model.addAirportRouteND(analyzer, route)
         model.addRouteList(analyzer, route)
+    rutas = model.getRouteList(analyzer)
+    for ruta in lt.iterator(rutas):
+        model.addAirportRouteND(analyzer, ruta)
+        
 
     return analyzer
 

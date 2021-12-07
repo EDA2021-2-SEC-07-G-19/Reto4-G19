@@ -50,7 +50,7 @@ def newAnalyzer():
                 'airports': None,
                 'ciudades': None,
                 'lt_airports': None,
-                'lt_ciudades': None,
+                'lt_ciudades': None
                 }
 
     analyzer['digrafo'] = gr.newGraph(datastructure = 'ADJ_LIST', 
@@ -93,10 +93,10 @@ def addAirportGraphs(analyzer, airport):
 
 def addRouteDiGraph(analyzer, route):
     edge = gr.getEdge(analyzer['digrafo'], route['Departure'], route['Destination'])
-    if edge == None:
+    if edge is None:
         distance = float(route['distance_km'])
         gr.addEdge(analyzer['digrafo'], route['Departure'], route['Destination'], distance)
-    
+    print('Ruta' + route['Departure'] + ' RUTA ' + route['Destination'] )
     return analyzer
 
 def addAirportRouteND(analyzer, route):
@@ -108,9 +108,10 @@ def addAirportRouteND(analyzer, route):
 
     edge1 = gr.getEdge(digraph, aero1, aero2)
     edge2 = gr.getEdge(digraph, aero2, aero1)
-
-    if edge1 is not None and edge2 is not None:
+    ndedge = gr.getEdge(nd,aero1,aero2)
+    if edge1 is not None and edge2 is not None and ndedge is None:
         gr.addEdge(nd, aero1, aero2, distancia)
+        
 
     return analyzer
 
@@ -122,7 +123,8 @@ def addCityList(analyzer, city):
 
 def addRouteList(analyzer, route):
     lt.addLast(analyzer['lt_routes'], route)
-
+def getRouteList(analyzer):
+    return analyzer['lt_routes']
 def addCityMap(analyzer, ciudad, ciudadUnica):
     ciudades = analyzer['ciudades']
     existe = mp.contains(ciudades, ciudad)
@@ -307,8 +309,8 @@ def TotalRoutesDiGraph(analyzer):
 
 def TotalRoutesGraph(analyzer):
     lt_routes = analyzer['lt_routes']
-
-    return
+    total_routes = lt.size(lt_routes)
+    return total_routes
 
 #=================================================================
 # Funciones utilizadas para comparar elementos dentro de una lista
