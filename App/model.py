@@ -152,6 +152,7 @@ def addCityMap(analyzer, ciudad, ciudadUnica):
 #=================================
 def requerimiento1(analyzer):
     lista=analyzer['lt_airports']
+    aeropuertos=lt.size(lista)
     mejores5 = pq.newIndexMinPQ(cmpMinPq)
     grafo=analyzer['digrafo']
    
@@ -180,7 +181,7 @@ def requerimiento1(analyzer):
         aeropuerto['outbound']=outdegree
         aeropuerto['conections']=indegree + outdegree
         lt.addFirst(listaFinal,aeropuerto)
-    return listaFinal
+    return listaFinal, aeropuertos
 
 
 def Requerimiento4(analyzer, ciudad, millas):

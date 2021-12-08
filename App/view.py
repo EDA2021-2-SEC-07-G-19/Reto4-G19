@@ -142,12 +142,19 @@ while True:
     elif int(inputs[0]) == 3:
         mejores5=controller.requerimiento1(cont)
 
+        print('=========== Req No.1 Inputs =========')
+        print('most connected airpotts in network (top 5)')
+        print('=========== Req No.1 Answer =========')
+        print('connected airports inside network:   ' + str(mejores5[1]) )
+        print('TOP 5 most connected airports...')
+
+
+
         tablaO = pt.PrettyTable(['Name','City', 'Country', 'IATA', 'Conections', 'inbound', 'outbound'])
         tablaO.max_width = 20
 
         for i in range(1,6):
-            aeropuerto = lt.getElement(mejores5,i)
-            print(aeropuerto)
+            aeropuerto = lt.getElement(mejores5[0],i)
             tablaO.add_row([aeropuerto['Name'], aeropuerto['City'], aeropuerto['Country'], aeropuerto['IATA'], aeropuerto['conections'], aeropuerto['inbound'], aeropuerto['outbound']])
         tablaO.hrules = ALL
         print(tablaO)
