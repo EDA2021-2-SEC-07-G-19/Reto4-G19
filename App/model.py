@@ -25,6 +25,7 @@
  """
 
 
+from DISClib.DataStructures.arraylist import iterator
 import config as cf
 from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
@@ -35,7 +36,7 @@ from DISClib.Algorithms.Graphs import scc
 from DISClib.Algorithms.Graphs import dfs
 from DISClib.Algorithms.Graphs import prim
 from DISClib.Algorithms.Graphs import dijsktra as djk
-from DISClib.ADT.graph import gr
+from DISClib.ADT.graph import gr, outdegree
 assert cf
 
 """
@@ -97,8 +98,6 @@ def addRouteDiGraph(analyzer, route):
     if edge is None:
         distance = float(route['distance_km'])
         gr.addEdge(analyzer['digrafo'], route['Departure'], route['Destination'], distance)
-    print('Ruta' + route['Departure'] + ' Ruta ' + route['Destination'] )
-    
     return analyzer
 
 def addAirportRouteND(analyzer, route):
@@ -145,6 +144,37 @@ def addCityMap(analyzer, ciudad, ciudadUnica):
 #=================================
 # Funciones para creacion de datos
 #=================================
+def requerimiento1(analyzer):
+    lista=analyzer['lt_airports']
+    mejores5=om.newMap(omaptype='BST')
+    grafo=analyzer['digrafo']
+   
+    aeropuerto=lt.getElement(lista, 1)
+    degree=gr.degree(grafo, aeropuerto['IATA'])
+    om.put(mejores5, degree, aeropuerto)
+    
+    for j in range(1, lt.size(lista)+1):
+        aeropuerto=lt.getElement(lista, j)
+        degree=gr.degree(grafo, aeropuerto['IATA'])
+        degree2=om.minKey(mejores5)
+        print(degree)
+        if om.size(mejores5) < 5:
+            om.put(mejores5, degree, aeropuerto)
+        elif degree>degree2: 
+            om.deleteMin(mejores5)
+            om.put(mejores5, degree, aeropuerto)
+
+    print(om.size(mejores5))
+    listaFinal=om.valueSet(mejores5)
+    for k in range(1,6):
+        aeropuerto=lt.getElement(listaFinal,k)
+        indegree=gr.indegree(grafo, aeropuerto['IATA'])
+        outdegree=gr.outdegree(grafo, aeropuerto['IATA'])
+        aeropuerto['inbound']=indegree
+        aeropuerto['outbound']=outdegree
+        aeropuerto['conections']=indegree + outdegree
+    return listaFinal
+
 def Requerimiento4(analyzer, ciudad, millas):
     digraph = analyzer['nodirigido']
     estruc_prim = prim.PrimMST(digraph)

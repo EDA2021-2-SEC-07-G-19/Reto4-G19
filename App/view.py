@@ -140,7 +140,18 @@ while True:
         print('El limite de recursion actual es: ' + str(sys.getrecursionlimit()))
 
     elif int(inputs[0]) == 3:
-        pass
+        mejores5=controller.requerimiento1(cont)
+
+        tablaO = pt.PrettyTable(['Name','City', 'Country', 'IATA', 'Conections', 'inbound', 'outbound'])
+        tablaO.max_width = 20
+
+        for i in range(1,6):
+            aeropuerto = lt.getElement(mejores5,i)
+            print(aeropuerto)
+            tablaO.add_row([aeropuerto['Name'], aeropuerto['City'], aeropuerto['Country'], aeropuerto['IATA'], aeropuerto['conections'], aeropuerto['inbound'], aeropuerto['outbound']])
+        tablaO.hrules = ALL
+        print(tablaO)
+
 
     elif int(inputs[0]) == 4:
         pass
