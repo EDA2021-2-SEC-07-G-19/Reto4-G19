@@ -130,6 +130,12 @@ def TotalRoutesDiGraph(analyzer):
 
     return model.TotalRoutesDiGraph(analyzer)
 
+def requerimiento1(analyzer):
+
+    mejores5=model.requerimiento1(analyzer)
+    
+    return mejores5
+
 def Requerimiento4(analyzer, ciudad, millas):
 
     return model.Requerimiento4(analyzer, ciudad, millas)
