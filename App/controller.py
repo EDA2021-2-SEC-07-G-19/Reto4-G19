@@ -51,6 +51,7 @@ def loadDataAirports(analyzer, airportsfile):
     for airport in input_file:
         model.addAirportGraphs(analyzer, airport)
         model.addAirportList(analyzer, airport)
+        model.addAirportMap(analyzer, airport)
 
     return analyzer
 
@@ -62,6 +63,7 @@ def loadDataRoutes(analyzer, routesfile):
     for route in input_file:
         model.addRouteDiGraph(analyzer, route)
         model.addRouteList(analyzer, route)
+
     rutas = model.getRouteList(analyzer)
     for ruta in lt.iterator(rutas):
         model.addAirportRouteND(analyzer, ruta)
