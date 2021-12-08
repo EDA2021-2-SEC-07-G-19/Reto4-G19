@@ -104,6 +104,10 @@ def getDataIATAList(analyzer, lista_iata):
 
     return model.getDataIATAList(analyzer, lista_iata)
 
+def getDataIATAList2(analyzer, lista_iata):
+
+    return model.getDataIATAList2(analyzer, lista_iata)
+
 def getCity(analyzer, city):
     
     return model.getCity(analyzer, city)

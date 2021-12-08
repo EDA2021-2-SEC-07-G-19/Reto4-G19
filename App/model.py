@@ -98,9 +98,9 @@ def addAirportGraphs(analyzer, airport):
     return analyzer
 
 def addRouteDiGraph(analyzer, route):
-
     distance = float(route['distance_km'])
     gr.addEdge(analyzer['digrafo'], route['Departure'], route['Destination'], distance)
+    
     return analyzer
 
 def addAirportRouteND(analyzer, route):
@@ -114,8 +114,7 @@ def addAirportRouteND(analyzer, route):
     edge2 = gr.getEdge(digraph, aero2, aero1)
     ndedge = gr.getEdge(nd,aero1,aero2)
     if edge1 is not None and edge2 is not None and ndedge is None:
-        gr.addEdge(nd, aero1, aero2, distancia)
-        
+        gr.addEdge(nd, aero1, aero2, distancia) 
 
     return analyzer
 
@@ -132,6 +131,7 @@ def addRouteList(analyzer, route):
     lt.addLast(analyzer['lt_routes'], route)
 
 def getRouteList(analyzer):
+    
     return analyzer['lt_routes']
 
 def addCityMap(analyzer, ciudad, ciudadUnica):
@@ -200,7 +200,26 @@ def Requerimiento4(analyzer, ciudad, millas):
         if tam > mayor:
             lt_rta = camino
             mayor = tam
-    return total_distancia, total_millas_km
+
+    airports_c = lt.size(keyset_visitados)
+    lt_rta = getDataIATAList2(analyzer, lt_rta)
+    distancia_camino = 0
+
+    for edge in lt.iterator(lt_rta):
+        distancia = edge['weight']
+        distancia_camino += distancia
+
+    distancia_camino = round(distancia_camino, 2)
+    
+    millas_f1 = 0
+    millas_f2 = 0
+    if total_millas_km < distancia_camino:
+        millas_f1 = round((distancia_camino - total_millas_km)/1.6,2)
+
+    else:
+        millas_f2 = round((total_millas_km - distancia_camino)/1.6, 2)
+
+    return airports_c, total_distancia, total_millas_km, distancia_camino, millas_f1, millas_f2, lt_rta
 
 def Requerimiento5(analyzer, ciudad):
     digraph = analyzer['digrafo']
@@ -322,25 +341,25 @@ def getDataIATAList(analyzer, lista_iata):
             i += 1
 
     return lt_rta
-def getDataIATAList2(analyzer, lista_iata):
-    lt_rta = lt.newList(datastructure = 'ARRAY_LIST')
-    lt_airports = analyzer['lt_airports']
-    tam_lt_airports = lt.size(lt_airports)
-    
-    for iata in lt.iterator(lista_iata): 
-        i = 0
-        encontrar = False
 
-        while i < tam_lt_airports and encontrar == False:
-            airport = lt.getElement(lt_airports, i)
-            iata2 = airport['IATA']
-            if str(iata) == str(iata2):
-                lt.addLast(lt_rta, airport)
-                encontrar = True
-        
-            i += 1
+def getDataIATAList2(analyzer, lista_iata):
+    nd = analyzer['nodirigido']
+    tam_lt_iata = lt.size(lista_iata)
+    lt_rta = lt.newList(datastructure = 'ARRAY_LIST')
+
+    i = 1
+    j = 2
+    while i <= (tam_lt_iata-1) and j <= tam_lt_iata:
+        vertexa = lt.getElement(lista_iata, i)
+        vertexb = lt.getElement(lista_iata, j)
+        edge = gr.getEdge(nd, vertexa, vertexb)
+        lt.addLast(lt_rta, edge)
+
+        i += 1
+        j += 1
 
     return lt_rta
+
 def getCity(analyzer, city):
     
     return me.getValue(mp.get(analyzer['ciudades'],city))

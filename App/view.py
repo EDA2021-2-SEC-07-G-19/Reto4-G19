@@ -244,14 +244,31 @@ while True:
         print(tabla1_req4)
         print('\n')
 
-        print('- Number of possible airports: ' + str(0))
-        print('- Max traveling distance between airports: ' + str(requerimiento4[0]) + ' (km)')
-        print('- Passenger available traveling miles: ' + str(requerimiento4[1]) + ' (km)')
+        print('- Number of possible airports: ' + str(requerimiento4[0]))
+        print('- Max traveling distance between airports: ' + str(requerimiento4[1]) + ' (km)')
+        print('- Passenger available traveling miles: ' + str(requerimiento4[2]) + ' (km)')
         print('\n')
 
         print('+++ Longest possible route with airport ' + str(ciudad) + ' +++')
-        print('- Longest possible path distance: ' + str(0) + ' (km)')
+        print('- Longest possible path distance: ' + str(requerimiento4[3]) + ' (km)')
         print('- Longest possible path details:')
+
+        tabla2_req4 = pt.PrettyTable(['Departure', 'Destination', 'Distance (km)'])
+        tabla2_req4.max_width = 20
+
+        rutas = requerimiento4[6]
+        for ruta in lt.iterator(rutas):
+            tabla2_req4.add_row([ruta['vertexA'], ruta['vertexB'], ruta['weight']])
+
+        tabla2_req4.hrules = ALL
+        print(tabla2_req4)
+        print('\n')
+
+        if requerimiento4[5] > 0:
+            print('The passenger has left ' + str(requerimiento4[5]) + ' miles after the trip')
+
+        else:
+            print('The passenger needs ' + str(requerimiento4[4]) + ' miles to complete the trip')
 
     elif int(inputs[0]) == 7:
 
