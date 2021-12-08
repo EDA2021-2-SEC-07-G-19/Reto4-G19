@@ -33,7 +33,6 @@ from DISClib.ADT import orderedmap as om
 from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Sorting import mergesort as ms
 from DISClib.Algorithms.Graphs import scc
-from DISClib.Algorithms.Graphs import scc
 from DISClib.Algorithms.Graphs import dfs
 from DISClib.Algorithms.Graphs import prim
 from DISClib.Algorithms.Graphs import dijsktra as djk
@@ -182,6 +181,15 @@ def requerimiento1(analyzer):
         aeropuerto['conections']=indegree + outdegree
         lt.addFirst(listaFinal,aeropuerto)
     return listaFinal, aeropuertos
+def requerimiento2(analyzer, codigo1, codigo2):
+    grafo=analyzer['digrafo']
+    clusters = scc.KosarajuSCC(grafo)
+    cluster=scc.connectedComponents(clusters)
+    connected=scc.stronglyConnected(clusters, codigo1, codigo2)
+
+    return cluster, connected
+
+
 
 
 def Requerimiento4(analyzer, ciudad, millas):

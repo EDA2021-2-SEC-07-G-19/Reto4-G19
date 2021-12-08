@@ -142,6 +142,12 @@ def requerimiento1(analyzer):
     
     return mejores5
 
+def requerimiento2(analyzer, codigo1, codigo2):
+
+    informacion=model.requerimiento2(analyzer, codigo1, codigo2)
+
+    return informacion
+
 def Requerimiento4(analyzer, ciudad, millas):
 
     return model.Requerimiento4(analyzer, ciudad, millas)

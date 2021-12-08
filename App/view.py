@@ -23,6 +23,8 @@
 import config as cf
 import sys
 import controller
+from DISClib.ADT import map as mp
+from DISClib.DataStructures import mapentry as me
 from DISClib.ADT import list as lt
 import time
 import prettytable as pt
@@ -161,7 +163,31 @@ while True:
 
 
     elif int(inputs[0]) == 4:
-        pass
+        codigo1=input('ingrese el codgio IATA de la primera ciudad')
+        codigo2=input('ingrese el codgio IATA de la segunda ciudad')
+        informacion=controller.requerimiento2(cont, codigo1, codigo2)
+        print('=========== Req No.2 Inputs =========')
+        print('Airport-1 IATA Code:   ' + codigo1)
+        print('Airport-2 IATA Code:   ' + codigo2)
+        print('=========== Req No.2 Answer =========')
+        print('Airport-1 IATA code:  ' + codigo1)
+        tabla1 = pt.PrettyTable(['IATA','Name','City', 'Country'])
+        tabla1.max_width = 20
+        aeropuerto1=me.getValue(mp.get(cont['mp_airports'], codigo1))
+        tabla1.add_row([aeropuerto1['IATA'], aeropuerto1['Name'],aeropuerto1['City'], aeropuerto1['Country']])
+        tabla1.hrules = ALL
+        print(tabla1)
+        print('Airport-2 IATA code:  ' + codigo2)
+        tabla2 = pt.PrettyTable(['IATA','Name','City', 'Country'])
+        tabla2.max_width = 20
+        aeropuerto2=me.getValue(mp.get(cont['mp_airports'], codigo2))
+        tabla2.add_row([aeropuerto2['IATA'], aeropuerto2['Name'],aeropuerto2['City'], aeropuerto2['Country']])
+        tabla2.hrules = ALL
+        print(tabla2)
+        
+        print('Number of SCC in Airport-route network:  '+ str(informacion[0]))
+        print('Does the'+ aeropuerto1['Name'] +' and the'+ aeropuerto2['Name'] + 'belong together?')
+        print('Ans:  '+ str(informacion[1]))
 
     elif int(inputs[0]) == 5:
 
