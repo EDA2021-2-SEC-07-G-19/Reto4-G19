@@ -142,15 +142,24 @@ while True:
         print('El limite de recursion actual es: ' + str(sys.getrecursionlimit()))
 
     elif int(inputs[0]) == 3:
-        mejores5=controller.requerimiento1(cont)
+
+        start_time = time.process_time()
+
+        mejores5 = controller.requerimiento1(cont)
+
+        stop_time = time.process_time()
+
+        elapsed_time_mseg = round((stop_time - start_time)*1000,2)
+
+        print('El tiempo de procesamiento del requerimiento elegido es: ' + str(elapsed_time_mseg) + ' ms' + '\n')
 
         print('=========== Req No.1 Inputs =========')
-        print('most connected airpotts in network (top 5)')
+        print('Most connected airports in network (top 5)')
+        print('\n')
+
         print('=========== Req No.1 Answer =========')
-        print('connected airports inside network:   ' + str(mejores5[1]) )
+        print('Connected airports inside network: ' + str(mejores5[1]) )
         print('TOP 5 most connected airports...')
-
-
 
         tablaO = pt.PrettyTable(['Name','City', 'Country', 'IATA', 'Conections', 'inbound', 'outbound'])
         tablaO.max_width = 20
@@ -161,33 +170,47 @@ while True:
         tablaO.hrules = ALL
         print(tablaO)
 
-
     elif int(inputs[0]) == 4:
-        codigo1=input('ingrese el codgio IATA de la primera ciudad')
-        codigo2=input('ingrese el codgio IATA de la segunda ciudad')
+        codigo1=input('Ingrese el codgio IATA de la primera ciudad: ')
+        codigo2=input('Ingrese el codgio IATA de la segunda ciudad: ')
+
+        print('\n')
+
+        start_time = time.process_time()
+
         informacion=controller.requerimiento2(cont, codigo1, codigo2)
+
+        stop_time = time.process_time()
+
+        elapsed_time_mseg = round((stop_time - start_time)*1000,2)
+
+        print('El tiempo de procesamiento del requerimiento elegido es: ' + str(elapsed_time_mseg) + ' ms' + '\n')
+
         print('=========== Req No.2 Inputs =========')
-        print('Airport-1 IATA Code:   ' + codigo1)
-        print('Airport-2 IATA Code:   ' + codigo2)
+        print('Airport-1 IATA Code: ' + codigo1)
+        print('Airport-2 IATA Code: ' + codigo2)
+        print('\n')
+
         print('=========== Req No.2 Answer =========')
-        print('Airport-1 IATA code:  ' + codigo1)
+        print('Airport-1 IATA code: ' + codigo1)
         tabla1 = pt.PrettyTable(['IATA','Name','City', 'Country'])
         tabla1.max_width = 20
         aeropuerto1=me.getValue(mp.get(cont['mp_airports'], codigo1))
         tabla1.add_row([aeropuerto1['IATA'], aeropuerto1['Name'],aeropuerto1['City'], aeropuerto1['Country']])
         tabla1.hrules = ALL
         print(tabla1)
-        print('Airport-2 IATA code:  ' + codigo2)
+        print('Airport-2 IATA code: ' + codigo2)
         tabla2 = pt.PrettyTable(['IATA','Name','City', 'Country'])
         tabla2.max_width = 20
         aeropuerto2=me.getValue(mp.get(cont['mp_airports'], codigo2))
         tabla2.add_row([aeropuerto2['IATA'], aeropuerto2['Name'],aeropuerto2['City'], aeropuerto2['Country']])
         tabla2.hrules = ALL
         print(tabla2)
+        print('\n')
         
-        print('Number of SCC in Airport-route network:  '+ str(informacion[0]))
-        print('Does the'+ aeropuerto1['Name'] +' and the'+ aeropuerto2['Name'] + 'belong together?')
-        print('Ans:  '+ str(informacion[1]))
+        print('Number of SCC in Airport-route network: '+ str(informacion[0]))
+        print('Does the '+ aeropuerto1['Name'] +' and the ' + aeropuerto2['Name'] + ' belong together?')
+        print('Ans: '+ str(informacion[1]))
 
     elif int(inputs[0]) == 5:
 

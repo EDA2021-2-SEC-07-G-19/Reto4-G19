@@ -151,7 +151,6 @@ def addCityMap(analyzer, ciudad, ciudadUnica):
 #=================================
 def requerimiento1(analyzer):
     lista=analyzer['lt_airports']
-    aeropuertos=lt.size(lista)
     mejores5 = pq.newIndexMinPQ(cmpMinPq)
     grafo=analyzer['digrafo']
    
@@ -170,17 +169,20 @@ def requerimiento1(analyzer):
             pq.insert(mejores5, aeropuerto['IATA'], degree)
 
     mapa=analyzer['mp_airports']
-    listaFinal=lt.newList('SINGLE_LINKED')
+    listaFinal=lt.newList(datastructure = 'ARRAY_LIST')
     for k in range(1,6):
         aeropuerto= me.getValue(mp.get(mapa, pq.delMin(mejores5)))
-        print(aeropuerto)
         indegree=gr.indegree(grafo, aeropuerto['IATA'])
         outdegree=gr.outdegree(grafo, aeropuerto['IATA'])
         aeropuerto['inbound']=indegree
         aeropuerto['outbound']=outdegree
         aeropuerto['conections']=indegree + outdegree
         lt.addFirst(listaFinal,aeropuerto)
-    return listaFinal, aeropuertos
+
+    tam = lt.size(listaFinal)
+    
+    return listaFinal, tam
+
 def requerimiento2(analyzer, codigo1, codigo2):
     grafo=analyzer['digrafo']
     clusters = scc.KosarajuSCC(grafo)
@@ -188,9 +190,6 @@ def requerimiento2(analyzer, codigo1, codigo2):
     connected=scc.stronglyConnected(clusters, codigo1, codigo2)
 
     return cluster, connected
-
-
-
 
 def Requerimiento4(analyzer, ciudad, millas):
     digraph = analyzer['nodirigido']
