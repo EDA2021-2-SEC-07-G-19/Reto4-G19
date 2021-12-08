@@ -33,6 +33,8 @@ from DISClib.ADT import orderedmap as om
 from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Sorting import mergesort as ms
 from DISClib.Algorithms.Graphs import scc
+from DISClib.Algorithms.Graphs import scc
+from DISClib.Algorithms.Graphs import dfs
 from DISClib.Algorithms.Graphs import prim
 from DISClib.Algorithms.Graphs import dijsktra as djk
 from DISClib.ADT.graph import gr, outdegree
@@ -96,7 +98,7 @@ def addAirportGraphs(analyzer, airport):
     return analyzer
 
 def addRouteDiGraph(analyzer, route):
-    
+
     distance = float(route['distance_km'])
     gr.addEdge(analyzer['digrafo'], route['Departure'], route['Destination'], distance)
     return analyzer
@@ -128,8 +130,10 @@ def addCityList(analyzer, city):
 
 def addRouteList(analyzer, route):
     lt.addLast(analyzer['lt_routes'], route)
+
 def getRouteList(analyzer):
     return analyzer['lt_routes']
+
 def addCityMap(analyzer, ciudad, ciudadUnica):
     ciudades = analyzer['ciudades']
     existe = mp.contains(ciudades, ciudad)
@@ -184,7 +188,17 @@ def Requerimiento4(analyzer, ciudad, millas):
     estruc_prim = prim.PrimMST(digraph)
     total_distancia = round(prim.weightMST(digraph, estruc_prim), 2)
     total_millas_km = round(millas*1.6, 2)
+    rec_dfs = dfs.DepthFirstSearch(digraph, ciudad)
+    visitados = rec_dfs['visited']
+    keyset_visitados = mp.keySet(visitados)
 
+    mayor = 0
+    for iata in lt.iterator(keyset_visitados):
+        camino = dfs.pathTo(rec_dfs, iata)
+        tam = lt.size(camino)
+        if tam > mayor:
+            lt_rta = camino
+            mayor = tam
     return total_distancia, total_millas_km
 
 def Requerimiento5(analyzer, ciudad):
@@ -307,7 +321,25 @@ def getDataIATAList(analyzer, lista_iata):
             i += 1
 
     return lt_rta
+def getDataIATAList2(analyzer, lista_iata):
+    lt_rta = lt.newList(datastructure = 'ARRAY_LIST')
+    lt_airports = analyzer['lt_airports']
+    tam_lt_airports = lt.size(lt_airports)
+    
+    for iata in lt.iterator(lista_iata): 
+        i = 0
+        encontrar = False
 
+        while i < tam_lt_airports and encontrar == False:
+            airport = lt.getElement(lt_airports, i)
+            iata2 = airport['IATA']
+            if str(iata) == str(iata2):
+                lt.addLast(lt_rta, airport)
+                encontrar = True
+        
+            i += 1
+
+    return lt_rta
 def getCity(analyzer, city):
     
     return me.getValue(mp.get(analyzer['ciudades'],city))
