@@ -173,6 +173,7 @@ def requerimiento1(analyzer):
 
     mapa=analyzer['mp_airports']
     listaFinal=lt.newList('SINGLE_LINKED')
+
     for k in range(1,6):
         aeropuerto= me.getValue(mp.get(mapa, pq.delMin(mejores5)))
         print(aeropuerto)
@@ -182,6 +183,7 @@ def requerimiento1(analyzer):
         aeropuerto['outbound']=outdegree
         aeropuerto['conections']=indegree + outdegree
         lt.addFirst(listaFinal,aeropuerto)
+    
     return listaFinal, aeropuertos
 
 def requerimiento2(analyzer, codigo1, codigo2):
@@ -215,10 +217,7 @@ def requerimiento3(analyzer, ciudadO, ciudadD):
         aeropuerto=me.getValue(mp.get(analyzer['mp_airports'],parada2))
         lt.addLast(aeropuertos, aeropuerto)
 
-    print(aeropuertos)
-
     return aeropuerto1, aeropuerto2, distanceTo, paradas, aeropuertos
-
 
 def aeropuertoMasCercano(analyzer,lat1,lon1):
     aeropuertoMinimo=None
@@ -237,7 +236,6 @@ def aeropuertoMasCercano(analyzer,lat1,lon1):
                 menorKilometraje=distancia
         kilometrajeActual+=10
 
-
     return aeropuertoMinimo
 
 def formulaHaversine(lat1, lat2, lon1, lon2):
@@ -251,7 +249,6 @@ def formulaHaversine(lat1, lat2, lon1, lon2):
     distancia=2*a*3958.8
 
     return distancia
-
 
 def Requerimiento4(analyzer, ciudad, millas):
     digraph = analyzer['nodirigido']
@@ -288,6 +285,7 @@ def Requerimiento4(analyzer, ciudad, millas):
         millas_f2 = round((total_millas_km - distancia_camino)/1.6, 2)
 
     return airports_c, total_distancia, total_millas_km, distancia_camino, millas_f1, millas_f2, lt_rta
+
 def Requerimiento5(analyzer, ciudad):
     digraph = analyzer['digrafo']
     adyacentes = gr.adjacents(digraph, ciudad)
@@ -408,6 +406,7 @@ def getDataIATAList(analyzer, lista_iata):
             i += 1
 
     return lt_rta
+
 def getDataIATAList2(analyzer, lista_iata):
     nd = analyzer['nodirigido']
     tam_lt_iata = lt.size(lista_iata)
@@ -425,6 +424,7 @@ def getDataIATAList2(analyzer, lista_iata):
         j += 1
 
     return lt_rta
+
 def getCity(analyzer, city):
     
     return me.getValue(mp.get(analyzer['ciudades'],city))
@@ -460,11 +460,6 @@ def TotalRoutesDiGraph(analyzer):
     lt_routes = analyzer['lt_routes']
     total_routes = lt.size(lt_routes)
 
-    return total_routes
-
-def TotalRoutesGraph(analyzer):
-    lt_routes = analyzer['lt_routes']
-    total_routes = lt.size(lt_routes)
     return total_routes
 
 #=================================================================
@@ -528,5 +523,6 @@ def cmpAirportsAlfa(iata1, iata2):
         return 1
     else:
         return 0
+
 def cmpMinPq(iata1, iata2):
     return True

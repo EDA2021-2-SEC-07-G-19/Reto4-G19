@@ -51,8 +51,6 @@ def printMenu():
     print('5- Requerimiento 3')
     print('6- Requerimiento 4')
     print('7- Requerimiento 5')
-    print('8- Requerimiento 6')
-    print('9- Requerimiento 7')
     print('0- Salir')
     print("*******************************************")
 
@@ -142,6 +140,7 @@ while True:
         print('El limite de recursion actual es: ' + str(sys.getrecursionlimit()))
 
     elif int(inputs[0]) == 3:
+        
         start_time = time.process_time()
 
         mejores5 = controller.requerimiento1(cont)
@@ -169,9 +168,9 @@ while True:
             tablaO.add_row([aeropuerto['Name'], aeropuerto['City'], aeropuerto['Country'], aeropuerto['IATA'], aeropuerto['conections'], aeropuerto['inbound'], aeropuerto['outbound']])
         tablaO.hrules = ALL
         print(tablaO)
-        
 
     elif int(inputs[0]) == 4:
+        
         codigo1=input('Ingrese el código IATA de la primera ciudad: ')
         codigo2=input('Ingrese el código IATA de la segunda ciudad: ')
 
@@ -261,7 +260,17 @@ while True:
         tablaDE.add_row([ciudadDElegida['city'], ciudadDElegida['lat'], ciudadDElegida['lng'], ciudadDElegida['country'], ciudadDElegida['iso2'], ciudadDElegida['iso3'] ])
         tablaDE.hrules = ALL
         print(tablaDE)
+        print('\n')
+
+        start_time = time.process_time()
+
         informacion= controller.requerimiento3(cont, ciudadOElegida, ciudadDElegida)
+
+        stop_time = time.process_time()
+
+        elapsed_time_mseg = round((stop_time - start_time)*1000,2)
+
+        print('El tiempo de procesamiento del requerimiento elegido es: ' + str(elapsed_time_mseg) + ' ms' + '\n')
 
         aeropuerto1=informacion[0]
         aeropuerto2=informacion[1]
@@ -269,23 +278,26 @@ while True:
         paradas= informacion[3]
         aeropuertos=informacion[4]
         print('=============== Req No. 3 Inputs ===============')  
-        print('Departure city:  '+ ciudadOElegida['city'])     
-        print('Arrival city:  '+ ciudadDElegida['city'])    
+        print('Departure city: '+ ciudadOElegida['city'])     
+        print('Arrival city: '+ ciudadDElegida['city'])
+        print('\n')
         print('=============== Req No. 3 Answer ===============')
-        print('The departure airport in  '+ ciudadOElegida['city'] +' is:  ')
+        print('The departure airport in '+ ciudadOElegida['city'] +' is: ')
         tablaAO = pt.PrettyTable(['IATA', 'Name', 'City', 'Country'])
         tablaAO.max_width = 20
         tablaAO.add_row([aeropuerto1['IATA'], aeropuerto1['Name'], aeropuerto1['City'], aeropuerto1['Country'] ])
         tablaAO.hrules = ALL
         print(tablaAO)
-        print('The arrival airport in  '+ ciudadDElegida['city'] +' is:  ')
+        print('\n')
+        print('The arrival airport in '+ ciudadDElegida['city'] +' is: ')
         tablaAD = pt.PrettyTable(['IATA', 'Name', 'City', 'Country'])
         tablaAD.max_width = 20
         tablaAD.add_row([aeropuerto2['IATA'], aeropuerto2['Name'], aeropuerto2['City'], aeropuerto2['Country'] ])
         tablaAD.hrules = ALL
         print(tablaAD)
-        print('+++ Dijsktra´s trip details +++')
-        print('Total distance:  '+ str(distancia))
+        print('\n')
+        print('+++ Dijsktras trip details +++')
+        print('Total distance: '+ str(distancia))
         print('Trip path')
         tablaP = pt.PrettyTable(['Departure', 'Destination', 'Distance'])
         tablaP.max_width = 20
@@ -306,9 +318,6 @@ while True:
 
         print(tablaS)
 
-
-
-        
     elif int(inputs[0]) == 6:
         
         ciudad = input('Ingrese la ciudad de origen (su código IATA): ')
@@ -412,12 +421,6 @@ while True:
 
         tabla_req5.hrules = ALL
         print(tabla_req5)
-
-    elif int(inputs[0]) == 8:
-        pass
-
-    elif int(inputs[0]) == 9:
-        pass
 
     else:
         sys.exit(0)
