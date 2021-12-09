@@ -171,8 +171,8 @@ while True:
         print(tablaO)
 
     elif int(inputs[0]) == 4:
-        codigo1=input('Ingrese el codgio IATA de la primera ciudad: ')
-        codigo2=input('Ingrese el codgio IATA de la segunda ciudad: ')
+        codigo1=input('Ingrese el código IATA de la primera ciudad: ')
+        codigo2=input('Ingrese el código IATA de la segunda ciudad: ')
 
         print('\n')
 
@@ -306,8 +306,12 @@ while True:
         tabla2_req4.max_width = 20
 
         rutas = requerimiento4[6]
+        contador = 0
         for ruta in lt.iterator(rutas):
             tabla2_req4.add_row([ruta['vertexA'], ruta['vertexB'], ruta['weight']])
+            contador += 1
+            if contador >= 10:
+                break
 
         tabla2_req4.hrules = ALL
         print(tabla2_req4)
