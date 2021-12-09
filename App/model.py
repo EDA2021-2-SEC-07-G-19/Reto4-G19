@@ -211,8 +211,6 @@ def requerimiento3(analyzer, ciudadO, ciudadD):
     lt.addLast(aeropuertos, aeropuerto1)
     for i in range(1, lt.size(paradas)+1):
         parada=lt.getElement(paradas, i)
-        
-        destino=lt.getElement(aeropuertos, i)
         parada2= ed.other(parada, ed.either(parada))
         aeropuerto=me.getValue(mp.get(analyzer['mp_airports'],parada2))
         lt.addLast(aeropuertos, aeropuerto)
