@@ -103,13 +103,11 @@ def getDataIATA(analyzer, iata):
 def getDataIATAList(analyzer, lista_iata):
 
     return model.getDataIATAList(analyzer, lista_iata)
-
 def getDataIATAList2(analyzer, lista_iata):
 
     return model.getDataIATAList2(analyzer, lista_iata)
-
-def getCity(analyzer, city):
     
+def getCity(analyzer, city):    
     return model.getCity(analyzer, city)
 
 def TotalVerticesDiGraph(analyzer):
@@ -145,6 +143,12 @@ def requerimiento1(analyzer):
 def requerimiento2(analyzer, codigo1, codigo2):
 
     informacion=model.requerimiento2(analyzer, codigo1, codigo2)
+
+    return informacion
+
+def requerimiento3(analyzer, ciudadO, ciudadD):
+
+    informacion=model.requerimiento3(analyzer, ciudadO, ciudadD)
 
     return informacion
 

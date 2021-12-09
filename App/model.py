@@ -25,12 +25,14 @@
  """
 
 
-from DISClib.DataStructures.arraylist import iterator
+
 import config as cf
+import math as mt
 from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
 from DISClib.ADT import orderedmap as om
 from DISClib.DataStructures import mapentry as me
+from DISClib.DataStructures import edge as ed
 from DISClib.Algorithms.Sorting import mergesort as ms
 from DISClib.Algorithms.Graphs import scc
 from DISClib.Algorithms.Graphs import dfs
@@ -97,9 +99,9 @@ def addAirportGraphs(analyzer, airport):
     return analyzer
 
 def addRouteDiGraph(analyzer, route):
+
     distance = float(route['distance_km'])
     gr.addEdge(analyzer['digrafo'], route['Departure'], route['Destination'], distance)
-    
     return analyzer
 
 def addAirportRouteND(analyzer, route):
@@ -113,7 +115,8 @@ def addAirportRouteND(analyzer, route):
     edge2 = gr.getEdge(digraph, aero2, aero1)
     ndedge = gr.getEdge(nd,aero1,aero2)
     if edge1 is not None and edge2 is not None and ndedge is None:
-        gr.addEdge(nd, aero1, aero2, distancia) 
+        gr.addEdge(nd, aero1, aero2, distancia)
+        
 
     return analyzer
 
@@ -130,7 +133,6 @@ def addRouteList(analyzer, route):
     lt.addLast(analyzer['lt_routes'], route)
 
 def getRouteList(analyzer):
-    
     return analyzer['lt_routes']
 
 def addCityMap(analyzer, ciudad, ciudadUnica):
@@ -151,6 +153,7 @@ def addCityMap(analyzer, ciudad, ciudadUnica):
 #=================================
 def requerimiento1(analyzer):
     lista=analyzer['lt_airports']
+    aeropuertos=lt.size(lista)
     mejores5 = pq.newIndexMinPQ(cmpMinPq)
     grafo=analyzer['digrafo']
    
@@ -169,19 +172,17 @@ def requerimiento1(analyzer):
             pq.insert(mejores5, aeropuerto['IATA'], degree)
 
     mapa=analyzer['mp_airports']
-    listaFinal=lt.newList(datastructure = 'ARRAY_LIST')
+    listaFinal=lt.newList('SINGLE_LINKED')
     for k in range(1,6):
         aeropuerto= me.getValue(mp.get(mapa, pq.delMin(mejores5)))
+        print(aeropuerto)
         indegree=gr.indegree(grafo, aeropuerto['IATA'])
         outdegree=gr.outdegree(grafo, aeropuerto['IATA'])
         aeropuerto['inbound']=indegree
         aeropuerto['outbound']=outdegree
         aeropuerto['conections']=indegree + outdegree
         lt.addFirst(listaFinal,aeropuerto)
-
-    tam = lt.size(listaFinal)
-    
-    return listaFinal, tam
+    return listaFinal, aeropuertos
 
 def requerimiento2(analyzer, codigo1, codigo2):
     grafo=analyzer['digrafo']
@@ -190,6 +191,67 @@ def requerimiento2(analyzer, codigo1, codigo2):
     connected=scc.stronglyConnected(clusters, codigo1, codigo2)
 
     return cluster, connected
+
+def requerimiento3(analyzer, ciudadO, ciudadD):
+    lat1= float(ciudadO['lat'])
+    lon1=float(ciudadO['lng'])
+    lat2= float(ciudadD['lat'])
+    lon2=float(ciudadD['lng'])
+    aeropuerto1=aeropuertoMasCercano(analyzer,lat1,lon1)
+    aeropuerto2=aeropuertoMasCercano(analyzer,lat2,lon2)
+    grafo=analyzer['digrafo']
+    path=djk.Dijkstra(grafo, aeropuerto1['IATA'])
+    distanceTo=djk.distTo(path, aeropuerto2['IATA'])
+
+    paradas= djk.pathTo(path, aeropuerto2['IATA'])
+
+    aeropuertos= lt.newList('ARRAY_LIST')
+    lt.addLast(aeropuertos, aeropuerto1)
+    for i in range(1, lt.size(paradas)+1):
+        parada=lt.getElement(paradas, i)
+        
+        destino=lt.getElement(aeropuertos, i)
+        parada2= ed.other(parada, ed.either(parada))
+        aeropuerto=me.getValue(mp.get(analyzer['mp_airports'],parada2))
+        lt.addLast(aeropuertos, aeropuerto)
+
+    print(aeropuertos)
+
+    return aeropuerto1, aeropuerto2, distanceTo, paradas, aeropuertos
+
+
+def aeropuertoMasCercano(analyzer,lat1,lon1):
+    aeropuertoMinimo=None
+    kilometrajeActual=10
+
+    while aeropuertoMinimo is None: 
+        lista= analyzer['lt_airports']
+        menorKilometraje=100000000000000
+        for i in range(1, lt.size(lista)+1):
+            aeropuerto=lt.getElement(lista, i)
+            lat2=float(aeropuerto['Latitude'])
+            lon2=float(aeropuerto['Longitude'])
+            distancia=formulaHaversine(lat1, lat2, lon1, lon2)
+            if distancia<kilometrajeActual and distancia<menorKilometraje:
+                aeropuertoMinimo=aeropuerto
+                menorKilometraje=distancia
+        kilometrajeActual+=10
+
+
+    return aeropuertoMinimo
+
+def formulaHaversine(lat1, lat2, lon1, lon2):
+    lat1r= (lat1*mt.pi)/180
+    lat2r= (lat2*mt.pi)/180
+    diflat=(lat2-lat1)/2
+    diflon=(lon2-lon1)/2
+    diflatr=(diflat*mt.pi)/180
+    diflonr=(diflon*mt.pi)/180
+    a=mt.asin((((mt.sin(diflatr))**2)+mt.cos(lat2r)*mt.cos(lat1r)*((mt.sin(diflonr))**2))**(1/2))
+    distancia=2*a*3958.8
+
+    return distancia
+
 
 def Requerimiento4(analyzer, ciudad, millas):
     digraph = analyzer['nodirigido']
@@ -207,7 +269,6 @@ def Requerimiento4(analyzer, ciudad, millas):
         if tam > mayor:
             lt_rta = camino
             mayor = tam
-
     airports_c = lt.size(keyset_visitados)
     lt_rta = getDataIATAList2(analyzer, lt_rta)
     distancia_camino = 0
@@ -227,7 +288,6 @@ def Requerimiento4(analyzer, ciudad, millas):
         millas_f2 = round((total_millas_km - distancia_camino)/1.6, 2)
 
     return airports_c, total_distancia, total_millas_km, distancia_camino, millas_f1, millas_f2, lt_rta
-
 def Requerimiento5(analyzer, ciudad):
     digraph = analyzer['digrafo']
     adyacentes = gr.adjacents(digraph, ciudad)
@@ -348,7 +408,6 @@ def getDataIATAList(analyzer, lista_iata):
             i += 1
 
     return lt_rta
-
 def getDataIATAList2(analyzer, lista_iata):
     nd = analyzer['nodirigido']
     tam_lt_iata = lt.size(lista_iata)
@@ -366,7 +425,6 @@ def getDataIATAList2(analyzer, lista_iata):
         j += 1
 
     return lt_rta
-
 def getCity(analyzer, city):
     
     return me.getValue(mp.get(analyzer['ciudades'],city))
